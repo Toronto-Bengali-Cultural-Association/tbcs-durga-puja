@@ -81,11 +81,6 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - [ ] Embed the real stream player (YouTube/Facebook Live embed `<iframe>`) in place
       of the `.stream-frame` placeholder once a stream key/link exists
 
-## committee.html
-- [x] Year updated to 2026
-- [ ] 8 committee member names + photos (roles are pre-filled, adjust as needed)
-- [ ] Sponsor logos (5 placeholder tiles) — add more/fewer as needed
-
 ## contact.html
 - [x] Email and venue/mailing address filled in
 - [ ] Phone number
