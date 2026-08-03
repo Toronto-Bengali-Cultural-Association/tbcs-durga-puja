@@ -60,14 +60,21 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - [ ] Food/bhog details if they differ from the placeholder copy
 
 ## gallery.html
-- [x] 5 of 9 tiles now have real photos: Durga Idol & Pandal, Shankha Dhwani (x2),
-      Community Pushpanjali, Kids' Program
-- [ ] 4 tiles still placeholder: Dhunuchi Naach, Bhog Serving, Pandal Decoration,
-      Visarjan. To add a real photo to any of these, follow the pattern used for
-      the filled-in tiles: swap the `<div class="ph-image">...</div>` for
+- [x] 12 of 14 tiles now have real photos: Durga Idol & Pandal, Shankha Dhwani (x2),
+      Community Pushpanjali, Kids' Program (crafts), Bhog Serving, Pandal Decoration
+      (idol close-up), Vocal Performance, Solo Dance Recital, Classical Dance Duet,
+      Kids' Dance Performance, Evening Aarti
+- [ ] 2 tiles still placeholder: Dhunuchi Naach, Visarjan — nobody's sent a photo of
+      either specific moment yet. To fill one in, follow the pattern used for the
+      filled-in tiles: swap the `<div class="ph-image">...</div>` for
       `<img class="gallery-photo" src="images/your-file.jpg" alt="...">`, and add
       `data-lightbox-img="images/your-file.jpg"` on the parent `.gallery-item` so the
       lightbox shows the real photo instead of the placeholder box.
+- 3 photos from your last batch weren't used to avoid an overly repetitive gallery
+  (a second group-dance shot similar to ones already used, a second crowd-anjali shot
+  similar to the existing Community Pushpanjali photo, and a candid indoor shot near
+  the vendor stalls): `IMG_6329.CR2`, `IMG_6830.JPG`, `IMG_6814.JPG`. They're still in
+  `images/` if you'd like any of them added — just say which.
 
 ## livestream.html
 - [x] Stream start date (October 10, 2026)
