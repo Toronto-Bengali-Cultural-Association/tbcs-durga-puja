@@ -129,10 +129,8 @@ p { line-height: 1.75; color: var(--text-muted); margin: 0 0 1em; }
   position: sticky;
   top: 0;
   z-index: 200;
-  background: rgba(253, 246, 236, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  background: var(--cream-300);
+  border-bottom: 1px solid rgba(122, 31, 43, 0.18);
   transition: box-shadow 0.3s var(--ease), background 0.3s var(--ease);
 }
 .site-header.scrolled { box-shadow: var(--shadow-sm); }

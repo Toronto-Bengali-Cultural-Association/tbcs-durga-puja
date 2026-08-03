@@ -45,6 +45,9 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - [ ] Founding story paragraphs (2)
 - [ ] Founding member photo
 - [ ] Timeline: founding year, first cultural program year, venue-change year, current year copy
+- [ ] "Join Us" section (Volunteer / Sponsor / Donate cards) intro paragraph + each
+      card's blurb
+- [ ] Sponsor logos (5 placeholder tiles in "Our Sponsors") — add more/fewer as needed
 
 ## events.html
 - [x] Dates, venue name, address (info strip + venue section)
@@ -80,6 +83,23 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - [x] Stream start date (October 10, 2026)
 - [ ] Embed the real stream player (YouTube/Facebook Live embed `<iframe>`) in place
       of the `.stream-frame` placeholder once a stream key/link exists
+
+## donate.html
+- [ ] **Needs a payment processor before the "Donate Online" button can go live.**
+      The button is currently disabled (greyed out, non-clickable) on purpose — do not
+      just link it to a bare URL. For a Canadian not-for-profit, the usual options are:
+      - **CanadaHelps** — handles tax receipts automatically, most common choice for
+        Canadian charities/nonprofits
+      - **PayPal Donate button** — fastest to set up, no receipting built in
+      - **Stripe Payment Links** — modern, flexible, no receipting built in
+      Once you've picked one and have an account, send me the donation link/embed code
+      and I'll wire up the button and remove the "coming soon" badge.
+- [ ] Confirm the "Not-for-Profit #1588370-9" registration number is correct and
+      current (pulled from the event flyer)
+- [ ] Intro paragraph, "Make a Donation" blurb, and "Where Your Donation Goes" card
+      copy are all placeholder
+- [ ] The E-Transfer / Sponsor / In-Person alternatives are live now (using your real
+      email) — good to go as-is
 
 ## contact.html
 - [x] Email and venue/mailing address filled in
