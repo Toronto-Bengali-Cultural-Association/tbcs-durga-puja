@@ -1,0 +1,9 @@
+# Raw camera files — huge and unused by the site (web-ready .jpg versions are committed instead)
+images/*.CR2
+images/*.cr2
+
+# Local tooling config
+.claude/
+
+# OS cruft
+.DS_Store
