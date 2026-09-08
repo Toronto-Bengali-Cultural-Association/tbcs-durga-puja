@@ -406,36 +406,6 @@ section { position: relative; padding: 88px 0; }
   border-radius: 999px;
 }
 
-/* -------------------- Timeline (Events page) -------------------- */
-.timeline { position: relative; margin: 0 auto; max-width: 760px; }
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 24px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(var(--gold-500), var(--marigold-500));
-}
-.timeline-item {
-  position: relative;
-  padding-left: 64px;
-  margin-bottom: 36px;
-}
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: 15px;
-  top: 4px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--surface);
-  border: 3px solid var(--marigold-500);
-}
-.timeline-item .time { font-weight: 700; color: var(--maroon-800); font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
-.timeline-item h4 { margin-bottom: 6px; font-size: 1.15rem; }
-
 /* -------------------- Schedule (Events page) -------------------- */
 .schedule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
 .schedule-day {
@@ -564,21 +534,8 @@ section { position: relative; padding: 88px 0; }
   border-radius: var(--radius-sm);
 }
 
-/* -------------------- Livestream -------------------- */
-.stream-frame {
-  aspect-ratio: 16/9;
-  border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, var(--maroon-900), var(--ink-900));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cream-200);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-.stream-frame .pulse-dot {
+/* -------------------- Status badge -------------------- */
+.pulse-dot {
   width: 10px; height: 10px; border-radius: 50%; background: var(--marigold-500);
   display: inline-block; margin-right: 8px; animation: pulse 1.6s ease-in-out infinite;
 }

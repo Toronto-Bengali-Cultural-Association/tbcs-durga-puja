@@ -6,6 +6,7 @@
   (`gallery-shankha-1.jpg`, `gallery-shankha-2.jpg`, `gallery-community-anjali.jpg`,
   `gallery-kids-program.jpg`) — browsers can't display RAW files directly, so always
   convert new RAW photos the same way before referencing them in HTML.
+
 ## Logo system (two marks, deliberate split)
 - **`images/logo-tree.png` — the primary org mark.** Tree + "TBCS", caption cropped off
   so it stays legible small. This is the brand mark in every page's header and footer
@@ -14,7 +15,7 @@
 - **`images/logo-tree-full.png`** — same mark with the "Toronto Bengali Cultural
   Society" wordmark underneath, used as the lockup in the About page's "Who We Are".
 - **`images/logo-durga.png` — the Durga Puja event mark.** Used only on the Durga Puja
-  pages (`events.html`, `livestream.html`) as the emblem above the page title.
+  page (`events.html`) as the emblem above the page title.
 - The originals you sent are kept alongside them as `images/source-logo-durga.jpeg`,
   `source-logo-tree-light.jpeg`, and `source-logo-tree-dark.jpeg` (the dark-background
   tree variant isn't used on the site yet, but it's there if a dark layout ever needs it).
@@ -42,10 +43,9 @@
 ## Confirmed real info (from the volunteer flyer, `images/volunteer-2026.jpg`)
 - Volunteer shift window (9 AM–10 PM both days), the seven role categories, and the
   dedicated sign-up address tbcscanadavolunteer@gmail.com are now live in a new
-  `#volunteer` section on `about.html`, right after the "Join Us" cards, with the
-  flyer image embedded alongside the transcribed text. The Volunteer card in "Join
-  Us" and every page's footer "Volunteer" link now point to `about.html#volunteer`
-  instead of the generic contact form.
+  `#volunteer` section on the Durga Puja page (`events.html`), with the flyer image
+  embedded alongside the transcribed text. The Volunteer card in About's "Join Us"
+  and every page's footer "Volunteer" link point to `events.html#volunteer`.
 
 ## Confirmed real info (from tbcscanada.wixsite.com/tbcs)
 - **Vision** and **Mission** statements are now the "Who We Are" section on
@@ -68,7 +68,9 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - [x] City — North York, ON
 - [x] Org description blurb (footer + `about.html` intro) — from the real mission statement
 - [ ] Contact phone number
-- [ ] Real social links: Facebook, Instagram, YouTube (footer + `contact.html`)
+- [x] Real social links — Facebook group and Instagram, live in every footer and on
+      `contact.html`. No YouTube link exists, so that icon was removed rather than
+      left pointing nowhere.
 - [x] `contact.html` form now submits to `mailto:tbcscanada@gmail.com` — still opens
       the visitor's email client rather than sending silently. For real inbox
       delivery without a backend, consider wiring it to Formspree / Netlify Forms.
@@ -85,10 +87,10 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 
 ## about.html
 - [x] Vision / mission / objectives / land acknowledgement — real copy from your Wix site
-- [ ] Founding story — the *history* (who started TBCS and when) is still missing; the
-      Wix site doesn't tell that story either. Timeline below needs it.
+- [ ] Founding story — the *history* (who started TBCS and when) is still missing, and
+      the Wix site doesn't tell it either. Worth writing down; if you do, the milestones
+      timeline is worth rebuilding with real years.
 - [ ] Founding member photo
-- [ ] Timeline: founding year, first cultural program year, venue-change year, current year copy
 - [ ] "Join Us" section (Volunteer / Sponsor / Donate cards) intro paragraph + each
       card's blurb
 - [ ] Sponsor logos (5 placeholder tiles in "Our Sponsors") — add more/fewer as needed
@@ -120,10 +122,17 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
   the vendor stalls): `IMG_6329.CR2`, `IMG_6830.JPG`, `IMG_6814.JPG`. They're still in
   `images/` if you'd like any of them added — just say which.
 
-## livestream.html
-- [x] Stream start date (October 10, 2026)
-- [ ] Embed the real stream player (YouTube/Facebook Live embed `<iframe>`) in place
-      of the `.stream-frame` placeholder once a stream key/link exists
+## Removed
+- **Livestream page** — deleted entirely (page, nav/footer links, homepage feature
+  card and hero button, and the Durga Puja page's "Watch Livestream" CTA), along with
+  the now-unused `.stream-frame` CSS. If a stream ever happens, it's easier to rebuild
+  than to keep a page advertising something that isn't planned. Recoverable from git
+  history if you change your mind.
+- **"Our Journey So Far" milestones timeline** on About — every entry was an invented
+  placeholder year, and the real founding history still isn't documented anywhere.
+  Its `.timeline` CSS went with it.
+- **YouTube social icon** — it only ever linked to the livestream page; there's no
+  actual channel. Add it back if you start one.
 
 ## donate.html
 - [ ] **Needs a payment processor before the "Donate Online" button can go live.**

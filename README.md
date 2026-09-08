@@ -6,7 +6,7 @@ Prototype website for Toronto Bengali Cultural Society's annual Durga Puja celeb
 
 Static HTML/CSS/JS site, no build step required:
 
-- `index.html`, `about.html`, `events.html`, `gallery.html`, `livestream.html`, `donate.html`, `contact.html` — pages
+- `index.html`, `about.html`, `events.html`, `gallery.html`, `donate.html`, `contact.html` — pages
 - `css/style.css` — shared design system (colors, typography, components)
 - `js/main.js` — nav, scroll animations, countdown timer, gallery lightbox
 - `images/` — photos and logo (original `.CR2` RAW camera files are kept locally but excluded from git — see `.gitignore`)
