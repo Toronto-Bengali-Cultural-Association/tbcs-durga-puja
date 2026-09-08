@@ -573,15 +573,6 @@ input:focus, textarea:focus {
 }
 textarea { resize: vertical; min-height: 130px; }
 
-.contact-info-list { display: flex; flex-direction: column; gap: 22px; }
-.contact-info-item { display: flex; gap: 16px; align-items: flex-start; }
-.contact-info-item .icon {
-  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-  background: var(--cream-200); color: var(--maroon-800);
-  display: flex; align-items: center; justify-content: center;
-}
-.contact-info-item .icon svg { width: 22px; height: 22px; }
-
 .map-placeholder {
   height: 260px;
   border-radius: var(--radius-md);

@@ -156,9 +156,11 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 
 ## contact.html
 - [x] Email filled in
-- Phone, response time, venue/mailing address and the map placeholder were all
-  removed at your request — the right-hand column is now just the email plus social
-  links. Footer phone placeholders are gone site-wide too.
+- The whole right-hand column is gone at your request — phone, response time,
+  venue/mailing address, map placeholder, and finally the email and social links too,
+  since those already live in the footer. The page is now just the centred "Send a
+  Message" card. Footer phone placeholders were removed site-wide as well, and the
+  orphaned `.contact-info-*` CSS went with the column.
 - [ ] **Contact form needs its Google Sheet hooked up — one step left.** The form no
       longer uses `mailto:` (that only opened the visitor's own mail client, and often
       did nothing at all, silently losing messages). It now posts submissions to a
