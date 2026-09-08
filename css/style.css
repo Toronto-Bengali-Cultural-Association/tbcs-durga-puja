@@ -360,7 +360,12 @@ section { position: relative; padding: 88px 0; }
   box-shadow: var(--shadow-sm);
   border: 1px solid rgba(212, 175, 55, 0.18);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  display: flex;
+  flex-direction: column;
 }
+/* pin any card action to the bottom so buttons line up across a row of cards
+   whose blurbs are different lengths */
+.card .btn { margin-top: auto; align-self: flex-start; }
 .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-md); }
 .card .icon {
   width: 52px;

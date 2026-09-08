@@ -96,16 +96,22 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - [ ] Founding member photo
 - [ ] "Join Us" section (Volunteer / Sponsor / Donate cards) intro paragraph + each
       card's blurb
-- [ ] Sponsor logos (5 placeholder tiles in "Our Sponsors") — add more/fewer as needed
 
-## events.html
+## events.html (Durga Pujo page)
 - [x] Dates, venue name, address (info strip + venue section)
 - [x] Hour-by-hour schedule — full ritual order/timing for both days, transcribed
       from the schedule flyer, plus the flyer image itself for printing/sharing.
-- [ ] Venue description, parking/accessibility notes, and whether the "Free Parking /
-      Wheelchair Accessible / Family Friendly" tags are actually accurate for Bodhi
-      Meditation Toronto
-- [ ] Embedded Google Map (replace the placeholder map block with an `<iframe>`)
+- [x] Embedded Google Map — real Maps embed pinned on the venue, using the keyless
+      `?output=embed` form so there's no API key to manage. "Get Directions" now opens
+      Maps routing instead of pointing at the contact page.
+- [x] Venue description — replaced with just the address, since the map now answers
+      "where is it". Worth adding a sentence only if you have facts the map can't show:
+      which entrance to use, transit directions, where to actually park.
+- [ ] **Verify the "Free Parking / Wheelchair Accessible / Family Friendly" tags.**
+      These are promises to visitors and nobody has confirmed them. Getting parking or
+      step-free access wrong is the kind of thing that strands someone on the day.
+- [x] Sponsors section moved here from About (`events.html#sponsors`); the donate page's
+      "sponsors page" link follows it.
 - [ ] Food/bhog details if they differ from the placeholder copy
 
 ## gallery.html
