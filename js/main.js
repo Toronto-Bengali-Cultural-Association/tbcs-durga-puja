@@ -1,5 +1,5 @@
 // ===========================================================
-// TBCS Durga Puja — shared site interactivity
+// TBCS Durga Pujo — shared site interactivity
 // ===========================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -73,7 +73,7 @@ function initScrollReveal() {
   targets.forEach((t) => observer.observe(t));
 }
 
-/* Countdown timer to the Puja date (data-countdown="YYYY-MM-DDTHH:mm:ss") */
+/* Countdown timer to the Pujo date (data-countdown="YYYY-MM-DDTHH:mm:ss") */
 function initCountdown() {
   const el = document.querySelector('[data-countdown]');
   if (!el) return;

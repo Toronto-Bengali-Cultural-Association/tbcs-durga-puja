@@ -1,6 +1,6 @@
-# TBCS Durga Puja Website
+# TBCS Durga Pujo Website
 
-Prototype website for Toronto Bengali Cultural Society's annual Durga Puja celebration.
+Prototype website for Toronto Bengali Cultural Society's annual Durga Pujo celebration.
 
 ## Structure
 

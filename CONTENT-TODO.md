@@ -1,4 +1,4 @@
-# Content To-Do — TBCS Durga Puja Website
+# Content To-Do — TBCS Durga Pujo Website
 
 ## Notes on images added so far
 - The `images/` folder has your original `.CR2` (Canon RAW) files kept as-is for
@@ -11,10 +11,10 @@
 - **`images/logo-tree.png` — the primary org mark.** Tree + "TBCS", caption cropped off
   so it stays legible small. This is the brand mark in every page's header and footer
   and the browser-tab favicon (`images/favicon.png`), because TBCS runs more than just
-  Durga Puja.
+  Durga Pujo.
 - **`images/logo-tree-full.png`** — same mark with the "Toronto Bengali Cultural
   Society" wordmark underneath, used as the lockup in the About page's "Who We Are".
-- **`images/logo-durga.png` — the Durga Puja event mark.** Used only on the Durga Puja
+- **`images/logo-durga.png` — the Durga Pujo event mark.** Used only on the Durga Pujo
   page (`events.html`) as the emblem above the page title.
 - The originals you sent are kept alongside them as `images/source-logo-durga.jpeg`,
   `source-logo-tree-light.jpeg`, and `source-logo-tree-dark.jpeg` (the dark-background
@@ -31,7 +31,7 @@
 - **Dates**: October 10–11, 2026 (Saturday–Sunday), 8:00 AM – 11:00 PM both days
 - **Venue**: Bodhi Meditation Toronto, 180 Yorkland Blvd, North York, ON M2J 1R5
 - **Email**: tbcscanada@gmail.com
-- This is now filled in across the homepage, Durga Puja page, contact page, and every
+- This is now filled in across the homepage, Durga Pujo page, contact page, and every
   page's footer.
 
 ## Confirmed real info (from the schedule flyer, `images/schedule-2026.jpg`)
@@ -43,7 +43,7 @@
 ## Confirmed real info (from the volunteer flyer, `images/volunteer-2026.jpg`)
 - Volunteer shift window (9 AM–10 PM both days), the seven role categories, and the
   dedicated sign-up address tbcscanadavolunteer@gmail.com are now live in a new
-  `#volunteer` section on the Durga Puja page (`events.html`), with the flyer image
+  `#volunteer` section on the Durga Pujo page (`events.html`), with the flyer image
   embedded alongside the transcribed text. The Volunteer card in About's "Join Us"
   and every page's footer "Volunteer" link point to `events.html#volunteer`.
 
@@ -127,7 +127,7 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 
 ## Removed
 - **Livestream page** — deleted entirely (page, nav/footer links, homepage feature
-  card and hero button, and the Durga Puja page's "Watch Livestream" CTA), along with
+  card and hero button, and the Durga Pujo page's "Watch Livestream" CTA), along with
   the now-unused `.stream-frame` CSS. If a stream ever happens, it's easier to rebuild
   than to keep a page advertising something that isn't planned. Recoverable from git
   history if you change your mind.
