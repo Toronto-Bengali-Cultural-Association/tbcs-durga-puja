@@ -80,9 +80,13 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - [ ] "Why join us" intro paragraph
 - [x] About-teaser paragraph — now the real mission; still needs a photo in place of
       the dashed placeholder box beside it
-- [x] Hero photo re-cropped (`images/hero-durga-idol.jpg`) so the idol fills the frame
-      instead of being lost in a wide pandal shot — this is what fixed it looking bad
-      on phones. The uncropped original is still in `images/` if you want a different crop.
+- [x] Hero photo fixed on phones/tablets. Two separate problems: (1) the real bug —
+      below 980px `.hero-art` collapsed to 0x0 and the photo did not render *at all*,
+      because auto margins stop a grid item stretching and its only child is absolutely
+      positioned, so it had no width to derive its height from; fixed with an explicit
+      `width:100%`. (2) the photo was also a tall pandal shot being square-cropped, so
+      it's now re-cropped onto the idol (`images/hero-durga-idol.jpg`). The uncropped
+      original is still in `images/` if you want a different crop.
 
 ## about.html
 - [x] Vision / mission / objectives / land acknowledgement — real copy from your Wix site
@@ -155,11 +159,16 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - Phone, response time, venue/mailing address and the map placeholder were all
   removed at your request — the right-hand column is now just the email plus social
   links. Footer phone placeholders are gone site-wide too.
-- [ ] **The form does not actually send mail.** It's a `mailto:` form, so it only tries
-      to open the visitor's own email client with a pre-filled draft; `method="post"`
-      to a `mailto:` is poorly supported, so for many visitors (webmail users, phones
-      with no mail app configured) pressing Send appears to do nothing and the message
-      is lost. Needs a form service — see the note in `contact.html`.
+- [ ] **Contact form needs its Google Sheet hooked up — one step left.** The form no
+      longer uses `mailto:` (that only opened the visitor's own mail client, and often
+      did nothing at all, silently losing messages). It now posts submissions to a
+      Google Apps Script that appends them as rows in a spreadsheet you own.
+      **To finish:** follow the setup steps at the top of `contact-form.gs` — create a
+      sheet, paste the script, deploy it as a web app, and send me the `/exec` URL (or
+      paste it yourself into `data-endpoint=""` on the form in `contact.html`).
+      Until that URL is filled in, the form falls back to opening the visitor's email
+      client, so nothing regresses in the meantime. The form also carries a hidden
+      honeypot field that silently drops bot submissions.
 
 ## Optional polish (not required to launch)
 - [ ] Replace Playfair Display / Poppins Google Fonts if you'd prefer different

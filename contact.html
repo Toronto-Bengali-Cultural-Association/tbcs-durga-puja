@@ -50,10 +50,11 @@
       <div class="reveal">
         <div class="card">
           <h3 style="margin-bottom:22px;">Send a Message</h3>
-          <!-- NOTE: this form currently opens the visitor's email client (mailto:).
-               For real inbox delivery without a backend, connect it to a form
-               service such as Formspree or Netlify Forms — see CONTENT-TODO.md -->
-          <form action="mailto:tbcscanada@gmail.com" method="post" enctype="text/plain">
+          <!-- Submissions go to a Google Sheet via an Apps Script web app.
+               Paste the deployed /exec URL into data-endpoint below (setup steps and
+               the script itself are in contact-form.gs). While data-endpoint is empty
+               the form falls back to opening the visitor's email client. -->
+          <form class="contact-form" data-endpoint="" novalidate>
             <div class="form-grid">
               <div>
                 <label for="name">Full Name</label>
@@ -72,10 +73,12 @@
                 <textarea id="message" name="Message" placeholder="Tell us how we can help" required></textarea>
               </div>
             </div>
+            <input type="text" name="Website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
             <button type="submit" class="btn btn-primary mt-lg">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 7 8.5-7"/></svg>
               Send Message
             </button>
+            <p class="form-status" role="status" aria-live="polite"></p>
           </form>
         </div>
       </div>

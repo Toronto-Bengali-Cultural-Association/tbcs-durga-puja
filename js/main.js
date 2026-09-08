@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initCountdown();
   initLightbox();
+  initContactForm();
   document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
 });
 
@@ -99,6 +100,59 @@ function initCountdown() {
   }
   tick();
   setInterval(tick, 1000);
+}
+
+/* Contact form — posts to the Google Apps Script endpoint in data-endpoint */
+function initContactForm() {
+  const form = document.querySelector('.contact-form');
+  if (!form) return;
+
+  const status = form.querySelector('.form-status');
+  const button = form.querySelector('button[type="submit"]');
+  const endpoint = (form.getAttribute('data-endpoint') || '').trim();
+  const value = (name) => (form.elements[name] ? form.elements[name].value : '');
+
+  function setStatus(message, kind) {
+    if (!status) return;
+    status.textContent = message;
+    status.className = 'form-status' + (kind ? ' is-' + kind : '');
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    // Honeypot — hidden from people, so anything in it is a bot. Pretend it worked.
+    if (value('Website')) {
+      form.reset();
+      setStatus('Thanks — your message has been sent.', 'ok');
+      return;
+    }
+
+    // Until the Sheet endpoint is configured, hand off to the visitor's mail client
+    // rather than silently dropping the message.
+    if (!endpoint) {
+      const body = `${value('Message')}\n\n— ${value('Name')} (${value('Email')})`;
+      window.location.href =
+        `mailto:tbcscanada@gmail.com?subject=${encodeURIComponent(value('Subject') || 'Message from tbcscanada.org')}` +
+        `&body=${encodeURIComponent(body)}`;
+      return;
+    }
+
+    button.disabled = true;
+    setStatus('Sending…', '');
+    // FormData keeps this a "simple" request, so the browser skips the CORS
+    // preflight that Apps Script endpoints do not answer.
+    fetch(endpoint, { method: 'POST', body: new FormData(form) })
+      .then(() => {
+        form.reset();
+        setStatus('Thanks — we got your message and will reply by email.', 'ok');
+      })
+      .catch(() => {
+        setStatus('Sorry, that didn’t go through. Please email tbcscanada@gmail.com directly.', 'error');
+      })
+      .finally(() => { button.disabled = false; });
+  });
 }
 
 /* Gallery lightbox */
