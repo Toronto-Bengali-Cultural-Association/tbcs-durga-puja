@@ -178,6 +178,9 @@ p { line-height: 1.75; color: var(--text-muted); margin: 0 0 1em; }
 }
 .nav-links a {
   position: relative;
+  /* Must be block: the flex items are the <li>s, so an inline <a> would not let
+     its vertical padding affect layout — the pill would paint over its neighbours. */
+  display: block;
   padding: 10px 16px;
   font-weight: 500;
   font-size: 0.94rem;
@@ -679,8 +682,12 @@ textarea { resize: vertical; min-height: 130px; }
 }
 @media (max-width: 900px) {
   .nav-links {
-    position: fixed;
-    inset: 66px 16px auto 16px;
+    /* Anchored to the sticky header rather than a hardcoded offset, so the panel
+       keeps clearing it if the header's height ever changes. */
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 16px;
+    right: 16px;
     flex-direction: column;
     align-items: stretch;
     background: var(--surface);
