@@ -67,7 +67,6 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - [x] Contact email — tbcscanada@gmail.com
 - [x] City — North York, ON
 - [x] Org description blurb (footer + `about.html` intro) — from the real mission statement
-- [ ] Contact phone number
 - [x] Real social links — Facebook group and Instagram, live in every footer and on
       `contact.html`. No YouTube link exists, so that icon was removed rather than
       left pointing nowhere.
@@ -152,9 +151,15 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
       email) — good to go as-is
 
 ## contact.html
-- [x] Email and venue/mailing address filled in
-- [ ] Phone number
-- [ ] Embedded map
+- [x] Email filled in
+- Phone, response time, venue/mailing address and the map placeholder were all
+  removed at your request — the right-hand column is now just the email plus social
+  links. Footer phone placeholders are gone site-wide too.
+- [ ] **The form does not actually send mail.** It's a `mailto:` form, so it only tries
+      to open the visitor's own email client with a pre-filled draft; `method="post"`
+      to a `mailto:` is poorly supported, so for many visitors (webmail users, phones
+      with no mail app configured) pressing Send appears to do nothing and the message
+      is lost. Needs a form service — see the note in `contact.html`.
 
 ## Optional polish (not required to launch)
 - [ ] Replace Playfair Display / Poppins Google Fonts if you'd prefer different
