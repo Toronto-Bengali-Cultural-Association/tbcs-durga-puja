@@ -430,9 +430,6 @@ section { position: relative; padding: 88px 0; }
 .schedule-row:last-child { border-bottom: none; }
 .schedule-time { flex: 0 0 100px; font-weight: 700; font-size: 0.82rem; color: var(--marigold-500); padding-top: 1px; }
 .schedule-desc { flex: 1; font-size: 0.92rem; color: var(--ink-700); margin: 0; line-height: 1.5; }
-.schedule-flyer { text-align: center; margin-top: 40px; }
-.schedule-flyer img { max-width: 340px; width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); }
-.schedule-flyer p { margin-top: 12px; font-size: 0.82rem; color: var(--text-muted); }
 
 /* -------------------- Info strip -------------------- */
 .info-strip {
@@ -582,9 +579,13 @@ input:focus, textarea:focus {
 }
 textarea { resize: vertical; min-height: 130px; }
 
-.map-placeholder {
-  height: 260px;
+.venue-map {
+  display: block;
+  width: 100%;
+  height: 340px;
+  border: 0;
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
 }
 
 /* -------------------- Footer -------------------- */
