@@ -7,3 +7,6 @@ images/*.cr2
 
 # OS cruft
 .DS_Store
+
+# Local scratch/log output
+*.log

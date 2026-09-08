@@ -150,17 +150,20 @@ p { line-height: 1.75; color: var(--text-muted); margin: 0 0 1em; }
   color: var(--primary-dark);
 }
 .brand-mark {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  overflow: hidden;
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   flex-shrink: 0;
 }
 .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+/* the tree mark is dark brown/teal, so it needs a light plate on dark surfaces */
+.site-footer .brand-mark { background: var(--cream-100); padding: 4px; }
+
+/* Durga-face mark, used on Durga Puja pages only */
+.puja-mark { display: block; width: 104px; height: 104px; margin: 0 auto 20px; object-fit: contain; }
 .brand-text .sub { display: block; font-family: var(--font-body); font-weight: 500; font-size: 0.62rem; letter-spacing: 0.14em; color: var(--marigold-500); text-transform: uppercase; }
 
 .nav-links {
@@ -269,7 +272,7 @@ p { line-height: 1.75; color: var(--text-muted); margin: 0 0 1em; }
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(200deg, rgba(90, 20, 32, 0.05) 0%, rgba(36, 16, 18, 0.55) 100%);
+  background: linear-gradient(200deg, rgba(90, 20, 32, 0.02) 0%, rgba(36, 16, 18, 0.38) 100%);
   pointer-events: none;
 }
 .hero-art .ring {
@@ -433,10 +436,30 @@ section { position: relative; padding: 88px 0; }
 .timeline-item .time { font-weight: 700; color: var(--maroon-800); font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
 .timeline-item h4 { margin-bottom: 6px; font-size: 1.15rem; }
 
+/* -------------------- Schedule (Events page) -------------------- */
+.schedule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.schedule-day {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border-top: 4px solid var(--marigold-500);
+  padding: 30px 28px;
+}
+.schedule-day h3 { font-size: 1.3rem; color: var(--maroon-800); margin-bottom: 2px; }
+.schedule-date { display: block; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; }
+.schedule-list { list-style: none; margin: 0; padding: 0; }
+.schedule-row { display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px dashed var(--gold-300); }
+.schedule-row:last-child { border-bottom: none; }
+.schedule-time { flex: 0 0 100px; font-weight: 700; font-size: 0.82rem; color: var(--marigold-500); padding-top: 1px; }
+.schedule-desc { flex: 1; font-size: 0.92rem; color: var(--ink-700); margin: 0; line-height: 1.5; }
+.schedule-flyer { text-align: center; margin-top: 40px; }
+.schedule-flyer img { max-width: 340px; width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); }
+.schedule-flyer p { margin-top: 12px; font-size: 0.82rem; color: var(--text-muted); }
+
 /* -------------------- Info strip -------------------- */
 .info-strip {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-top: 56px;
   position: relative;
@@ -656,6 +679,9 @@ textarea { resize: vertical; min-height: 130px; }
   align-items: center;
 }
 .tag-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.role-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; margin: 20px 0 0; }
+.role-list li { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: var(--text); }
+.role-list li svg { flex-shrink: 0; width: 18px; height: 18px; color: var(--marigold-500); }
 .tag {
   background: var(--cream-200);
   color: var(--maroon-800);
@@ -711,9 +737,17 @@ textarea { resize: vertical; min-height: 130px; }
 @media (max-width: 760px) {
   .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
   .info-strip { grid-template-columns: 1fr; margin-top: 28px; }
+  .schedule-grid { grid-template-columns: 1fr; }
+  .role-list { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .form-grid { grid-template-columns: 1fr; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
   .countdown { justify-content: center; }
   section { padding: 64px 0; }
+}
+@media (max-width: 560px) {
+  /* the full org name plus the mark crowds the header on a phone */
+  .brand { font-size: 1rem; gap: 9px; }
+  .brand-mark { width: 38px; height: 38px; }
+  .puja-mark { width: 84px; height: 84px; }
 }

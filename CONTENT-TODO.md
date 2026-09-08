@@ -6,13 +6,25 @@
   (`gallery-shankha-1.jpg`, `gallery-shankha-2.jpg`, `gallery-community-anjali.jpg`,
   `gallery-kids-program.jpg`) — browsers can't display RAW files directly, so always
   convert new RAW photos the same way before referencing them in HTML.
-- The real TBCS logo (Durga-face mandala) is live as the brand mark in every page's
-  header and footer, and as the browser-tab favicon. Source: `images/logo.png`
-  (background removed, transparent) and `images/favicon.png` (small version), both
-  generated from `images/456426253_..._n.jpg`. If you ever get a higher-res or
-  vector (SVG/AI) version of the logo, send it over and I'll regenerate these two
-  for extra crispness. Note: your event flyer also shows a second "TBCS" tree-style
-  logo — let me know if that one should replace/accompany the Durga-face mark anywhere.
+## Logo system (two marks, deliberate split)
+- **`images/logo-tree.png` — the primary org mark.** Tree + "TBCS", caption cropped off
+  so it stays legible small. This is the brand mark in every page's header and footer
+  and the browser-tab favicon (`images/favicon.png`), because TBCS runs more than just
+  Durga Puja.
+- **`images/logo-tree-full.png`** — same mark with the "Toronto Bengali Cultural
+  Society" wordmark underneath, used as the lockup in the About page's "Who We Are".
+- **`images/logo-durga.png` — the Durga Puja event mark.** Used only on the Durga Puja
+  pages (`events.html`, `livestream.html`) as the emblem above the page title.
+- The originals you sent are kept alongside them as `images/source-logo-durga.jpeg`,
+  `source-logo-tree-light.jpeg`, and `source-logo-tree-dark.jpeg` (the dark-background
+  tree variant isn't used on the site yet, but it's there if a dark layout ever needs it).
+- All three were rebuilt from your originals by flood-filling the *outer* white to
+  transparent, which is the fix for the old logo looking odd: the previous
+  `images/logo.png` had *all* white stripped, so the page background showed through the
+  inside of the mandala. Now the interior white is preserved, so the marks read
+  correctly on cream, on the dark maroon footer, and on any photo.
+- If you ever get vector (SVG/AI) versions, send them over and I'll regenerate all of
+  these for extra crispness at large sizes.
 
 ## Confirmed real info (from the event flyer)
 - **Dates**: October 10–11, 2026 (Saturday–Sunday), 8:00 AM – 11:00 PM both days
@@ -21,14 +33,41 @@
 - This is now filled in across the homepage, Durga Puja page, contact page, and every
   page's footer.
 
+## Confirmed real info (from the schedule flyer, `images/schedule-2026.jpg`)
+- Full hour-by-hour ritual schedule for both days (Shastir Bodhon through Bishorjon/
+  Sindoor Khela) is transcribed into `events.html`'s schedule section, with the flyer
+  image itself embedded below as a printable/shareable version. Homepage schedule
+  teaser cards updated to reference the confirmed times too.
+
+## Confirmed real info (from the volunteer flyer, `images/volunteer-2026.jpg`)
+- Volunteer shift window (9 AM–10 PM both days), the seven role categories, and the
+  dedicated sign-up address tbcscanadavolunteer@gmail.com are now live in a new
+  `#volunteer` section on `about.html`, right after the "Join Us" cards, with the
+  flyer image embedded alongside the transcribed text. The Volunteer card in "Join
+  Us" and every page's footer "Volunteer" link now point to `about.html#volunteer`
+  instead of the generic contact form.
+
+## Confirmed real info (from tbcscanada.wixsite.com/tbcs)
+- **Vision** and **Mission** statements are now the "Who We Are" section on
+  `about.html`, and the mission also drives the About page intro, the homepage "Our
+  Story" teaser, and the footer blurb on every page.
+- The five **Objectives** from the site's "What We Do" page (Promote Religious
+  Harmony, Promotion of Cultural Heritage, Cultivate Social Welfare, Community
+  Engagement & Participation, Social Responsibility) replaced the three placeholder
+  "Mission & Values" cards on `about.html`.
+- The **Land Acknowledgement** is now a section at the bottom of `about.html`.
+- Worth double-checking the wording I lifted against your own copy — a couple of the
+  objective blurbs were tightened for the web, and I want them to still be exactly
+  what the committee wants to say.
+
 Everything below is still a placeholder. Search each file for `[PLACEHOLDER...]` (text)
 or the dashed gold boxes labeled "Placeholder" (images) to find every spot listed here.
 
 ## Site-wide (footer of every page)
 - [x] Contact email — tbcscanada@gmail.com
 - [x] City — North York, ON
+- [x] Org description blurb (footer + `about.html` intro) — from the real mission statement
 - [ ] Contact phone number
-- [ ] Org description blurb (footer, `about.html` intro)
 - [ ] Real social links: Facebook, Instagram, YouTube (footer + `contact.html`)
 - [x] `contact.html` form now submits to `mailto:tbcscanada@gmail.com` — still opens
       the visitor's email client rather than sending silently. For real inbox
@@ -36,13 +75,18 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 
 ## index.html (Home)
 - [x] Event dates, countdown target, venue, city — filled from the flyer
-- [ ] Entry / ticket info (not on the flyer — need price or "free" confirmation)
 - [ ] Hero description paragraph could be reworded once you confirm more program details
 - [ ] "Why join us" intro paragraph
-- [ ] About-teaser photo + paragraph
+- [x] About-teaser paragraph — now the real mission; still needs a photo in place of
+      the dashed placeholder box beside it
+- [x] Hero photo re-cropped (`images/hero-durga-idol.jpg`) so the idol fills the frame
+      instead of being lost in a wide pandal shot — this is what fixed it looking bad
+      on phones. The uncropped original is still in `images/` if you want a different crop.
 
 ## about.html
-- [ ] Founding story paragraphs (2)
+- [x] Vision / mission / objectives / land acknowledgement — real copy from your Wix site
+- [ ] Founding story — the *history* (who started TBCS and when) is still missing; the
+      Wix site doesn't tell that story either. Timeline below needs it.
 - [ ] Founding member photo
 - [ ] Timeline: founding year, first cultural program year, venue-change year, current year copy
 - [ ] "Join Us" section (Volunteer / Sponsor / Donate cards) intro paragraph + each
@@ -51,11 +95,8 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 
 ## events.html
 - [x] Dates, venue name, address (info strip + venue section)
-- [ ] Entry/ticket info
-- [ ] Hour-by-hour schedule — the timeline now shows two day-blocks (Sat Oct 10,
-      Sun Oct 11) with the confirmed 8 AM–11 PM window, but the specific ritual
-      order/timing within each day is still marked "to be announced." Fill in once
-      the committee finalizes the program.
+- [x] Hour-by-hour schedule — full ritual order/timing for both days, transcribed
+      from the schedule flyer, plus the flyer image itself for printing/sharing.
 - [ ] Venue description, parking/accessibility notes, and whether the "Free Parking /
       Wheelchair Accessible / Family Friendly" tags are actually accurate for Bodhi
       Meditation Toronto
