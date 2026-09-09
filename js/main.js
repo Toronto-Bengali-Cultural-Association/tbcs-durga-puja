@@ -166,50 +166,54 @@ function initContactForm() {
   });
 }
 
-/* Sponsor banner slideshow */
+/* Sponsor banner marquee — duplicates the row so it can loop seamlessly */
 function initSponsorShow() {
-  const show = document.querySelector('[data-sponsor-show]');
-  if (!show) return;
+  const marquee = document.querySelector('[data-sponsor-marquee]');
+  if (!marquee) return;
+  const track = marquee.querySelector('.sponsor-track');
+  if (!track || !track.children.length) return;
 
-  const slides = [...show.querySelectorAll('.sponsor-stage img')];
-  if (!slides.length) return;
-
-  const current = document.querySelector('[data-sponsor-current]');
-  const total = document.querySelector('[data-sponsor-total]');
-  if (total) total.textContent = String(slides.length);
-
-  let index = slides.findIndex((s) => s.classList.contains('is-active'));
-  if (index < 0) index = 0;
-
-  function go(next) {
-    slides[index].classList.remove('is-active');
-    index = (next + slides.length) % slides.length;
-    slides[index].classList.add('is-active');
-    if (current) current.textContent = String(index + 1);
+  function start() {
+    // A second copy is what makes translateX(-50%) land exactly on the seam.
+    if (!track.dataset.cloned) {
+      [...track.children].forEach((node) => {
+        const copy = node.cloneNode(true);
+        copy.setAttribute('aria-hidden', 'true');   // duplicates are decorative
+        track.appendChild(copy);
+      });
+      track.dataset.cloned = '1';
+    }
+    // Constant speed regardless of how many banners there are.
+    const distance = track.scrollWidth / 2;
+    track.style.setProperty('--roll-duration', Math.round(distance / 55) + 's');
+    track.classList.add('is-rolling');
   }
 
-  show.querySelector('.prev').addEventListener('click', () => { go(index - 1); restart(); });
-  show.querySelector('.next').addEventListener('click', () => { go(index + 1); restart(); });
-
-  // Auto-advance, unless the visitor asked for reduced motion.
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let timer = null;
-  function restart() {
-    if (still) return;
-    clearInterval(timer);
-    timer = setInterval(() => go(index + 1), 5000);
+  // The loop distance is measured from laid-out widths, and these banners are
+  // lazy-loaded below the fold — so wait until the row is actually on screen,
+  // by which point the browser has begun fetching them.
+  function whenLoaded() {
+    const pending = [...track.querySelectorAll('img')].filter((i) => !i.complete);
+    if (!pending.length) { start(); return; }
+    let left = pending.length;
+    pending.forEach((img) => {
+      const done = () => { if (--left === 0) start(); };
+      img.addEventListener('load', done, { once: true });
+      img.addEventListener('error', done, { once: true });
+    });
+    // Never let one stuck image hold the whole row still.
+    setTimeout(() => { if (!track.dataset.cloned) start(); }, 5000);
   }
-  function stop() { clearInterval(timer); }
 
-  // Don't advance under someone reading a banner, or while the tab is hidden.
-  show.addEventListener('mouseenter', stop);
-  show.addEventListener('mouseleave', restart);
-  show.addEventListener('focusin', stop);
-  show.addEventListener('focusout', restart);
-  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : restart()));
-
-  go(index);
-  restart();
+  if (!('IntersectionObserver' in window)) { whenLoaded(); return; }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      whenLoaded();
+    });
+  }, { rootMargin: '200px' });
+  observer.observe(marquee);
 }
 
 /* Gallery lightbox */
