@@ -50,11 +50,11 @@
       <div class="reveal" style="max-width:680px; margin:0 auto;">
         <div class="card">
           <h3 style="margin-bottom:22px;">Send a Message</h3>
-          <!-- Submissions go to a Google Sheet via an Apps Script web app.
-               Paste the deployed /exec URL into data-endpoint below (setup steps and
-               the script itself are in contact-form.gs). While data-endpoint is empty
-               the form falls back to opening the visitor's email client. -->
-          <form class="contact-form" data-endpoint="" novalidate>
+          <!-- Submissions POST to a Google Apps Script web app, which appends them to
+               a Google Sheet. If data-endpoint is ever emptied, the form falls back to
+               opening the visitor's email client rather than dropping the message. -->
+          <form class="contact-form" novalidate
+                data-endpoint="https://script.google.com/macros/s/AKfycbwPNRQQa_fL0xi2RygR2gfQ4I8r1ttQWertLSIBCb6CkiL5b-9CVEwNx4fzNBsryvlufA/exec">
             <div class="form-grid">
               <div>
                 <label for="name">Full Name</label>

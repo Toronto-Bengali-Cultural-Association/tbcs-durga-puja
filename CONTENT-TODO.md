@@ -167,16 +167,14 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
   since those already live in the footer. The page is now just the centred "Send a
   Message" card. Footer phone placeholders were removed site-wide as well, and the
   orphaned `.contact-info-*` CSS went with the column.
-- [ ] **Contact form needs its Google Sheet hooked up — one step left.** The form no
-      longer uses `mailto:` (that only opened the visitor's own mail client, and often
-      did nothing at all, silently losing messages). It now posts submissions to a
-      Google Apps Script that appends them as rows in a spreadsheet you own.
-      **To finish:** follow the setup steps at the top of `contact-form.gs` — create a
-      sheet, paste the script, deploy it as a web app, and send me the `/exec` URL (or
-      paste it yourself into `data-endpoint=""` on the form in `contact.html`).
-      Until that URL is filled in, the form falls back to opening the visitor's email
-      client, so nothing regresses in the meantime. The form also carries a hidden
-      honeypot field that silently drops bot submissions.
+- [x] **Contact form is live and posting to your Google Sheet.** Endpoint wired into
+      `data-endpoint` on the form in `contact.html`; submissions POST url-encoded and
+      the visitor gets a confirmation message. A hidden honeypot field named `Website`
+      catches bots — your script should discard any submission where it is non-empty.
+- [ ] **Delete the two test rows** I sent while wiring it up (both say "TEST ... safe
+      to delete"), and confirm the values landed in the right columns. The deployed
+      script is not the one in `contact-form.gs`, so I could not verify field mapping
+      from outside — the form sends Name, Email, Subject, Message, Website.
 
 ## Optional polish (not required to launch)
 - [ ] Replace Playfair Display / Poppins Google Fonts if you'd prefer different

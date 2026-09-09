@@ -1,4 +1,13 @@
 /**
+ * NOTE (live): the deployed web app is NOT this script. The endpoint wired into
+ * contact.html answers doGet with {"status":"ok"} and doPost with
+ * {"status":"success"}, so it was written separately. This file is kept as
+ * reference for the setup steps and as a known-good fallback implementation.
+ * The form posts these fields, url-encoded: Name, Email, Subject, Message,
+ * Website (a honeypot that should be discarded when non-empty).
+ */
+
+/**
  * TBCS contact form -> Google Sheet
  * =================================
  *

@@ -141,9 +141,11 @@ function initContactForm() {
 
     button.disabled = true;
     setStatus('Sending…', '');
-    // FormData keeps this a "simple" request, so the browser skips the CORS
-    // preflight that Apps Script endpoints do not answer.
-    fetch(endpoint, { method: 'POST', body: new FormData(form) })
+    // URLSearchParams posts as application/x-www-form-urlencoded. That is a
+    // CORS-safelisted type, so the browser skips the preflight Apps Script does
+    // not answer — and Apps Script only fills e.parameter reliably for this
+    // encoding, not for the multipart body FormData would send.
+    fetch(endpoint, { method: 'POST', body: new URLSearchParams(new FormData(form)) })
       .then(() => {
         form.reset();
         setStatus('Thanks — we got your message and will reply by email.', 'ok');
