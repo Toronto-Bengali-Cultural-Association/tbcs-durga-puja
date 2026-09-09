@@ -166,43 +166,125 @@ function initContactForm() {
   });
 }
 
-/* Sponsor banner marquee — duplicates the row so it can loop seamlessly */
+/* Sponsor marquee — auto-scrolls, and stays draggable/swipeable while it does.
+   Driven by scrollLeft rather than a CSS transform so that the automatic motion
+   and the visitor's own scrolling are the same mechanism and cannot fight. */
 function initSponsorShow() {
   const marquee = document.querySelector('[data-sponsor-marquee]');
   if (!marquee) return;
   const track = marquee.querySelector('.sponsor-track');
   if (!track || !track.children.length) return;
 
-  function start() {
-    // A second copy is what makes translateX(-50%) land exactly on the seam.
-    if (!track.dataset.cloned) {
-      [...track.children].forEach((node) => {
-        const copy = node.cloneNode(true);
-        copy.setAttribute('aria-hidden', 'true');   // duplicates are decorative
-        track.appendChild(copy);
-      });
-      track.dataset.cloned = '1';
+  const wrap = marquee.closest('.sponsor-marquee-wrap');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SPEED = 0.55;              // px per frame, ~33px/s
+  let half = 0;                    // width of one copy of the row
+  let paused = true;
+  let idleTimer = null;
+  let frame = null;
+
+  // Both the auto-scroll and the scroll listener can hit the seam on the same
+  // frame; without this flag they take turns wrapping each other and the row
+  // ping-pongs. The wrap is announced here and the listener skips that event.
+  let selfWrapped = false;
+
+  function loop() {
+    if (!paused && half > 0) {
+      marquee.scrollLeft += SPEED;
+      if (marquee.scrollLeft >= half) {
+        selfWrapped = true;
+        marquee.scrollLeft -= half;   // identical copy, so the jump is invisible
+      }
     }
-    // Constant speed regardless of how many banners there are.
-    const distance = track.scrollWidth / 2;
-    track.style.setProperty('--roll-duration', Math.round(distance / 55) + 's');
-    track.classList.add('is-rolling');
+    frame = requestAnimationFrame(loop);
   }
 
-  // The loop distance is measured from laid-out widths, and these banners are
-  // lazy-loaded below the fold — so wait until the row is actually on screen,
-  // by which point the browser has begun fetching them.
+  // Any manual interaction wins; auto resumes once they stop.
+  function nudge(ms) {
+    paused = true;
+    clearTimeout(idleTimer);
+    if (!still) idleTimer = setTimeout(() => { paused = false; }, ms);
+  }
+
+  function begin() {
+    if (track.dataset.cloned) return;
+    [...track.children].forEach((node) => {
+      const copy = node.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');   // duplicates are decorative
+      track.appendChild(copy);
+    });
+    track.dataset.cloned = '1';
+    half = track.scrollWidth / 2;
+    paused = still;
+    if (!frame) frame = requestAnimationFrame(loop);
+  }
+
+  // Let the visitor scroll backwards past the start and come out at the end.
+  marquee.addEventListener('scroll', () => {
+    if (!half) return;
+    if (selfWrapped) { selfWrapped = false; return; }
+    if (marquee.scrollLeft <= 0) {
+      selfWrapped = true;
+      marquee.scrollLeft = half;
+    }
+  }, { passive: true });
+
+  marquee.addEventListener('mouseenter', () => { paused = true; });
+  marquee.addEventListener('mouseleave', () => { if (!still) paused = false; });
+  marquee.addEventListener('focusin', () => { paused = true; });
+  marquee.addEventListener('focusout', () => { if (!still) paused = false; });
+  marquee.addEventListener('wheel', () => nudge(1500), { passive: true });
+  marquee.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+  marquee.addEventListener('touchend', () => nudge(2500), { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) paused = true; else if (!still) paused = false;
+  });
+
+  if (wrap) {
+    const step = () => Math.max(220, marquee.clientWidth * 0.7);
+    wrap.querySelector('.prev').addEventListener('click', () => {
+      marquee.scrollBy({ left: -step(), behavior: 'smooth' }); nudge(2500);
+    });
+    wrap.querySelector('.next').addEventListener('click', () => {
+      marquee.scrollBy({ left: step(), behavior: 'smooth' }); nudge(2500);
+    });
+  }
+
+  // Desktop drag — a mouse cannot swipe, and a trackpad user may not think to.
+  let down = false, startX = 0, startScroll = 0;
+  marquee.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return;      // native touch scrolling is better
+    down = true; startX = e.clientX; startScroll = marquee.scrollLeft;
+    paused = true;
+    marquee.classList.add('is-dragging');
+    marquee.setPointerCapture(e.pointerId);
+  });
+  marquee.addEventListener('pointermove', (e) => {
+    if (!down) return;
+    e.preventDefault();
+    marquee.scrollLeft = startScroll - (e.clientX - startX);
+  });
+  function release(e) {
+    if (!down) return;
+    down = false;
+    marquee.classList.remove('is-dragging');
+    try { marquee.releasePointerCapture(e.pointerId); } catch (err) { /* already gone */ }
+    nudge(2500);
+  }
+  marquee.addEventListener('pointerup', release);
+  marquee.addEventListener('pointercancel', release);
+
+  // Widths are only real once the lazy-loaded banners are on screen and decoded.
   function whenLoaded() {
     const pending = [...track.querySelectorAll('img')].filter((i) => !i.complete);
-    if (!pending.length) { start(); return; }
+    if (!pending.length) { begin(); return; }
     let left = pending.length;
     pending.forEach((img) => {
-      const done = () => { if (--left === 0) start(); };
+      const done = () => { if (--left === 0) begin(); };
       img.addEventListener('load', done, { once: true });
       img.addEventListener('error', done, { once: true });
     });
-    // Never let one stuck image hold the whole row still.
-    setTimeout(() => { if (!track.dataset.cloned) start(); }, 5000);
+    setTimeout(() => begin(), 5000);   // never let one stuck image hold the row
   }
 
   if (!('IntersectionObserver' in window)) { whenLoaded(); return; }

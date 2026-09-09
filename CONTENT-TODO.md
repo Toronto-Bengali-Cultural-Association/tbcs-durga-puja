@@ -63,6 +63,28 @@
 Everything below is still a placeholder. Search each file for `[PLACEHOLDER...]` (text)
 or the dashed gold boxes labeled "Placeholder" (images) to find every spot listed here.
 
+## Asset cache-busting (read before editing css/style.css or js/main.js)
+Every page loads `css/style.css?v=<hash>` and `js/main.js?v=<hash>`, where the hash is
+the file's md5. GitHub Pages caches HTML for 10 minutes, so without this a visitor can
+end up with yesterday's HTML and today's JavaScript — which is what made the sponsor
+row sit still and its arrows do nothing: the new script looked for markup the cached
+page did not have, gave up, and left the buttons dead. Versioned URLs mean stale HTML
+keeps asking for the assets it was built against, so the page stays self-consistent.
+
+**After changing either file, re-stamp the pages:**
+```
+python3 - <<'EOF'
+import hashlib, re, glob
+sig = lambda p: hashlib.md5(open(p,'rb').read()).hexdigest()[:8]
+css, js = sig('css/style.css'), sig('js/main.js')
+for f in glob.glob("*.html"):
+    s = open(f).read()
+    s = re.sub(r'href="css/style\.css(\?v=[0-9a-f]+)?"', f'href="css/style.css?v={css}"', s)
+    s = re.sub(r'src="js/main\.js(\?v=[0-9a-f]+)?"', f'src="js/main.js?v={js}"', s)
+    open(f, "w").write(s)
+EOF
+```
+
 ## Site-wide (footer of every page)
 - [x] Contact email — tbcscanada@gmail.com
 - [x] City — North York, ON
