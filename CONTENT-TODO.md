@@ -182,6 +182,11 @@ EOF
       In each case the artwork was taken from images that appear on a single
       slide/page (the ones repeated across every page are the orange frame, drums,
       seal and tier ribbon), so no cropping was needed. Source decks are gitignored.
+- These are **previous** years' supporters, not confirmed 2026 ones, so the section
+  is headed "In Good Company" and says so — presenting them as current sponsors would
+  misrepresent businesses that have not signed on for 2026, and several banners carry
+  2024/2025 dates. Re-word once this year's list is settled.
+- The Durga Pujo page's placeholder sponsor tiles were removed; this row replaces them.
 - Duplicates left as-is on purpose: a few businesses appear twice with different
   artwork from the two decks. Confirmed fine to keep both.
 - The "Durga Puja 2024 / Bhajans by Mala Gandhi" event poster was dropped — it was a
