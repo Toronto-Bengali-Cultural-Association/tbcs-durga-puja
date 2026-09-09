@@ -475,7 +475,6 @@ section { position: relative; padding: 88px 0; }
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   cursor: grab;
-  scroll-snap-type: x proximity;
 }
 .sponsor-marquee::-webkit-scrollbar { display: none; }
 .sponsor-marquee.is-dragging { cursor: grabbing; }
@@ -494,7 +493,6 @@ section { position: relative; padding: 88px 0; }
   box-shadow: var(--shadow-sm);
   user-select: none;
   -webkit-user-drag: none;
-  scroll-snap-align: center;
 }
 .sponsor-nav {
   position: absolute;
