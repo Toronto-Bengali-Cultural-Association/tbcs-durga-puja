@@ -10,3 +10,8 @@ images/*.cr2
 
 # Local scratch/log output
 *.log
+
+# Sponsor source decks — 28MB of Canva export; the banners are extracted to
+# images/sponsors/ and committed there instead
+Sponser Slide*.pptx
+Sponser Slide*.pdf

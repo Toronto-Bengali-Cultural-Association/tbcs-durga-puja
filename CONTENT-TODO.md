@@ -143,7 +143,22 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
 - **YouTube social icon** — it only ever linked to the livestream page; there's no
   actual channel. Add it back if you start one.
 
-## donate.html
+## donate.html — now the "Get Involved" page
+- [x] Restructured: Donate first (e-transfer / sponsor / in-person as the main routes,
+      with online card payments marked coming soon), then Where Your Donation Goes,
+      Become a Sponsor, the sponsor banner slideshow, and Become a Volunteer.
+      The "Questions? / Contact Us" section was removed.
+- [x] 21 sponsor banners extracted from your Canva deck into `images/sponsors/`. They
+      came from the PPTX rather than the PDF, so they are the original artwork with no
+      orange frame and no Gold/Silver/Bronze ribbon. The source decks are gitignored
+      (28MB); re-extract from the PPTX if you need them again.
+- [ ] **Sponsorship tiers.** The deck has Gold / Silver / Bronze but nothing says what
+      each includes or costs — tell me and I'll list them under Become a Sponsor.
+- [ ] Some banners are from past years (one reads "Durga Puja 2025"). Confirm which
+      sponsors are current for 2026 and I'll drop the rest.
+- [ ] The Durga Pujo page still has `#sponsors` with 5 dashed placeholder tiles. Now
+      that real banners exist here, that section is redundant — say the word and I'll
+      remove it or point it at this page.
 - [ ] **Needs a payment processor before the "Donate Online" button can go live.**
       The button is currently disabled (greyed out, non-clickable) on purpose — do not
       just link it to a bare URL. For a Canadian not-for-profit, the usual options are:

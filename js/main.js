@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
   initLightbox();
   initContactForm();
+  initSponsorShow();
   document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
 });
 
@@ -163,6 +164,52 @@ function initContactForm() {
       })
       .finally(() => { button.disabled = false; });
   });
+}
+
+/* Sponsor banner slideshow */
+function initSponsorShow() {
+  const show = document.querySelector('[data-sponsor-show]');
+  if (!show) return;
+
+  const slides = [...show.querySelectorAll('.sponsor-stage img')];
+  if (!slides.length) return;
+
+  const current = document.querySelector('[data-sponsor-current]');
+  const total = document.querySelector('[data-sponsor-total]');
+  if (total) total.textContent = String(slides.length);
+
+  let index = slides.findIndex((s) => s.classList.contains('is-active'));
+  if (index < 0) index = 0;
+
+  function go(next) {
+    slides[index].classList.remove('is-active');
+    index = (next + slides.length) % slides.length;
+    slides[index].classList.add('is-active');
+    if (current) current.textContent = String(index + 1);
+  }
+
+  show.querySelector('.prev').addEventListener('click', () => { go(index - 1); restart(); });
+  show.querySelector('.next').addEventListener('click', () => { go(index + 1); restart(); });
+
+  // Auto-advance, unless the visitor asked for reduced motion.
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer = null;
+  function restart() {
+    if (still) return;
+    clearInterval(timer);
+    timer = setInterval(() => go(index + 1), 5000);
+  }
+  function stop() { clearInterval(timer); }
+
+  // Don't advance under someone reading a banner, or while the tab is hidden.
+  show.addEventListener('mouseenter', stop);
+  show.addEventListener('mouseleave', restart);
+  show.addEventListener('focusin', stop);
+  show.addEventListener('focusout', restart);
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : restart()));
+
+  go(index);
+  restart();
 }
 
 /* Gallery lightbox */
