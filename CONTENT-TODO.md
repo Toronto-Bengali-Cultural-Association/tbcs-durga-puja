@@ -92,6 +92,12 @@ for f in glob.glob("*.html"):
 EOF
 ```
 
+## House style
+No em dashes in visitor-facing copy. They read as machine-written, so sentences are
+split or re-punctuated instead. This covers page text, headings, meta descriptions
+(which show in search results) and the strings the contact form prints. En dashes in
+date ranges like Oct 10-11 are fine.
+
 ## Site-wide (footer of every page)
 - [x] Contact email — tbcscanada@gmail.com
 - [x] City — North York, ON
@@ -143,7 +149,8 @@ EOF
 - [ ] Food/bhog details if they differ from the placeholder copy
 
 ## gallery.html
-- [x] 12 of 14 tiles now have real photos: Durga Idol & Pandal, Shankha Dhwani (x2),
+- [x] 15 of 17 tiles now have real photos (three added from the newest RAW batch:
+      a second pandal idol, a child sounding the shankha, and the TBCS stage backdrop): Durga Idol & Pandal, Shankha Dhwani (x2),
       Community Pushpanjali, Kids' Program (crafts), Bhog Serving, Pandal Decoration
       (idol close-up), Vocal Performance, Solo Dance Recital, Classical Dance Duet,
       Kids' Dance Performance, Evening Aarti

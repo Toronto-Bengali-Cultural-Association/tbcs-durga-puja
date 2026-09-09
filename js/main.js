@@ -126,7 +126,7 @@ function initContactForm() {
     // Honeypot — hidden from people, so anything in it is a bot. Pretend it worked.
     if (value('Website')) {
       form.reset();
-      setStatus('Thanks — your message has been sent.', 'ok');
+      setStatus('Thanks, your message has been sent.', 'ok');
       return;
     }
 
@@ -134,7 +134,7 @@ function initContactForm() {
     // loud: if they have no mail app registered, setting location.href does
     // nothing visible, and silence reads as a broken form.
     if (!endpoint) {
-      const body = `${value('message')}\n\n— ${value('fullName')} (${value('email')})`;
+      const body = `${value('message')}\n\nFrom ${value('fullName')} (${value('email')})`;
       setStatus('Opening your email app… if nothing happens, please write to tbcscanada@gmail.com directly.', '');
       window.location.href =
         `mailto:tbcscanada@gmail.com?subject=${encodeURIComponent(value('subject') || 'Message from tbcscanada.org')}` +
@@ -157,7 +157,7 @@ function initContactForm() {
         try { ok = JSON.parse(text).status === 'success'; } catch (err) { ok = false; }
         if (!ok) throw new Error('endpoint did not report success');
         form.reset();
-        setStatus('Thanks — we got your message and will reply by email.', 'ok');
+        setStatus('Thanks, we got your message and will reply by email.', 'ok');
       })
       .catch(() => {
         setStatus('Sorry, that didn’t go through. Please email tbcscanada@gmail.com directly.', 'error');
