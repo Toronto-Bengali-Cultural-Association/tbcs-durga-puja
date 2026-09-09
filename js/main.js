@@ -177,20 +177,28 @@ function initSponsorShow() {
 
   const wrap = marquee.closest('.sponsor-marquee-wrap');
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const SPEED = 0.55;              // px per frame, ~33px/s
+  // How fast the sponsor row drifts, in pixels per second.
+  // Lower = slower. 30 is a gentle drift, 60 is brisk.
+  const SCROLL_SPEED = 30;
+
   let half = 0;                    // width of one copy of the row
   let paused = true;
   let idleTimer = null;
   let frame = null;
+  let lastFrame = 0;
 
   // Both the auto-scroll and the scroll listener can hit the seam on the same
   // frame; without this flag they take turns wrapping each other and the row
   // ping-pongs. The wrap is announced here and the listener skips that event.
   let selfWrapped = false;
 
-  function loop() {
-    if (!paused && half > 0) {
-      marquee.scrollLeft += SPEED;
+  function loop(now) {
+    // Advance by elapsed time, not by a fixed step per frame — otherwise the row
+    // moves twice as fast on a 120Hz screen as on a 60Hz one.
+    const elapsed = lastFrame ? Math.min((now - lastFrame) / 1000, 0.1) : 0;
+    lastFrame = now;
+    if (!paused && half > 0 && elapsed) {
+      marquee.scrollLeft += SCROLL_SPEED * elapsed;
       if (marquee.scrollLeft >= half) {
         selfWrapped = true;
         marquee.scrollLeft -= half;   // identical copy, so the jump is invisible
