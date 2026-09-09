@@ -63,6 +63,13 @@
 Everything below is still a placeholder. Search each file for `[PLACEHOLDER...]` (text)
 or the dashed gold boxes labeled "Placeholder" (images) to find every spot listed here.
 
+## Sponsor row
+The banners do not auto-scroll, by choice. They are browsed with the arrows, by
+dragging, or by swiping, and clicking one opens it full size. This also sidesteps
+`prefers-reduced-motion`: an auto-scrolling row is exactly the motion that setting
+suppresses, so anyone with it enabled saw a frozen row while everyone else saw it
+drift — the same row now behaves identically for everybody.
+
 ## Asset cache-busting (read before editing css/style.css or js/main.js)
 Every page loads `css/style.css?v=<hash>` and `js/main.js?v=<hash>`, where the hash is
 the file's md5. GitHub Pages caches HTML for 10 minutes, so without this a visitor can

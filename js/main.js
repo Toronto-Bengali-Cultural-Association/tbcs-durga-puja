@@ -166,9 +166,8 @@ function initContactForm() {
   });
 }
 
-/* Sponsor marquee — auto-scrolls, and stays draggable/swipeable while it does.
-   Driven by scrollLeft rather than a CSS transform so that the automatic motion
-   and the visitor's own scrolling are the same mechanism and cannot fight. */
+/* Sponsor row — a plain horizontal scroller. No auto-scroll by design: the row
+   is browsed by dragging, swiping, or the arrows. */
 function initSponsorShow() {
   const marquee = document.querySelector('[data-sponsor-marquee]');
   if (!marquee) return;
@@ -176,105 +175,30 @@ function initSponsorShow() {
   if (!track || !track.children.length) return;
 
   const wrap = marquee.closest('.sponsor-marquee-wrap');
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // How fast the sponsor row drifts, in pixels per second.
-  // Lower = slower. 30 is a gentle drift, 60 is brisk.
-  const SCROLL_SPEED = 30;
-
-  let half = 0;                    // width of one copy of the row
-  let paused = true;
-  let idleTimer = null;
-  let frame = null;
-  let lastFrame = 0;
-
-  // Both the auto-scroll and the scroll listener can hit the seam on the same
-  // frame; without this flag they take turns wrapping each other and the row
-  // ping-pongs. The wrap is announced here and the listener skips that event.
-  let selfWrapped = false;
-
-  function loop(now) {
-    // Advance by elapsed time, not by a fixed step per frame — otherwise the row
-    // moves twice as fast on a 120Hz screen as on a 60Hz one.
-    const elapsed = lastFrame ? Math.min((now - lastFrame) / 1000, 0.1) : 0;
-    lastFrame = now;
-    if (!paused && half > 0 && elapsed) {
-      marquee.scrollLeft += SCROLL_SPEED * elapsed;
-      if (marquee.scrollLeft >= half) {
-        selfWrapped = true;
-        marquee.scrollLeft -= half;   // identical copy, so the jump is invisible
-      }
-    }
-    frame = requestAnimationFrame(loop);
-  }
-
-  // Any manual interaction wins; auto resumes once they stop.
-  function nudge(ms) {
-    paused = true;
-    clearTimeout(idleTimer);
-    if (!still) idleTimer = setTimeout(() => { paused = false; }, ms);
-  }
-
-  function begin() {
-    if (track.dataset.cloned) return;
-    [...track.children].forEach((node) => {
-      const copy = node.cloneNode(true);
-      copy.setAttribute('aria-hidden', 'true');   // duplicates are decorative
-      track.appendChild(copy);
-    });
-    track.dataset.cloned = '1';
-    half = track.scrollWidth / 2;
-    paused = still;
-    if (!frame) frame = requestAnimationFrame(loop);
-  }
-
-  // Let the visitor scroll backwards past the start and come out at the end.
-  marquee.addEventListener('scroll', () => {
-    if (!half) return;
-    if (selfWrapped) { selfWrapped = false; return; }
-    if (marquee.scrollLeft <= 0) {
-      selfWrapped = true;
-      marquee.scrollLeft = half;
-    }
-  }, { passive: true });
-
-  marquee.addEventListener('mouseenter', () => { paused = true; });
-  marquee.addEventListener('mouseleave', () => { if (!still) paused = false; });
-  marquee.addEventListener('focusin', () => { paused = true; });
-  marquee.addEventListener('focusout', () => { if (!still) paused = false; });
-  marquee.addEventListener('wheel', () => nudge(1500), { passive: true });
-  marquee.addEventListener('touchstart', () => { paused = true; }, { passive: true });
-  marquee.addEventListener('touchend', () => nudge(2500), { passive: true });
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) paused = true; else if (!still) paused = false;
-  });
-
   if (wrap) {
     const step = () => Math.max(220, marquee.clientWidth * 0.7);
-    wrap.querySelector('.prev').addEventListener('click', () => {
-      marquee.scrollBy({ left: -step(), behavior: 'smooth' }); nudge(2500);
-    });
-    wrap.querySelector('.next').addEventListener('click', () => {
-      marquee.scrollBy({ left: step(), behavior: 'smooth' }); nudge(2500);
-    });
+    wrap.querySelector('.prev').addEventListener('click', () =>
+      marquee.scrollBy({ left: -step(), behavior: 'smooth' }));
+    wrap.querySelector('.next').addEventListener('click', () =>
+      marquee.scrollBy({ left: step(), behavior: 'smooth' }));
   }
 
-  // Desktop drag — a mouse cannot swipe, and a trackpad user may not think to.
+  // Drag to scroll — a mouse cannot swipe, and a trackpad user may not think to.
   let down = false, startX = 0, startScroll = 0, dragged = false;
   marquee.addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'touch') return;      // native touch scrolling is better
     down = true; dragged = false;
     startX = e.clientX; startScroll = marquee.scrollLeft;
-    paused = true;
   });
   marquee.addEventListener('pointermove', (e) => {
     if (!down) return;
-    // Only treat it as a drag past a few pixels, so a slightly shaky click on a
-    // banner still opens it rather than being swallowed as a swipe.
+    // Only a drag past a few pixels, so a slightly shaky click on a banner still
+    // opens it rather than being swallowed as a swipe.
     if (!dragged && Math.abs(e.clientX - startX) > 4) {
       dragged = true;
       marquee.classList.add('is-dragging');
       // Capture only once it is genuinely a drag: capturing on pointerdown
-      // retargets the click that follows a simple tap, and the banner would
+      // retargets the click that follows a plain tap, and the banner would
       // never receive it.
       try { marquee.setPointerCapture(e.pointerId); } catch (err) { /* not capturable */ }
     }
@@ -287,42 +211,17 @@ function initSponsorShow() {
     down = false;
     marquee.classList.remove('is-dragging');
     try { marquee.releasePointerCapture(e.pointerId); } catch (err) { /* already gone */ }
-    nudge(2500);
   }
   marquee.addEventListener('pointerup', release);
   marquee.addEventListener('pointercancel', release);
 
-  // Click a banner to see it full size. Delegated, because the row is cloned
-  // after this runs and the copies must be clickable too.
+  // Click a banner to see it full size.
   marquee.addEventListener('click', (e) => {
     const img = e.target.closest('img');
     if (!img || !lightboxOpen) return;
     if (dragged) { dragged = false; return; }   // that click ended a swipe
     lightboxOpen(img.currentSrc || img.src, 'Sponsor banner');
   });
-
-  // Widths are only real once the lazy-loaded banners are on screen and decoded.
-  function whenLoaded() {
-    const pending = [...track.querySelectorAll('img')].filter((i) => !i.complete);
-    if (!pending.length) { begin(); return; }
-    let left = pending.length;
-    pending.forEach((img) => {
-      const done = () => { if (--left === 0) begin(); };
-      img.addEventListener('load', done, { once: true });
-      img.addEventListener('error', done, { once: true });
-    });
-    setTimeout(() => begin(), 5000);   // never let one stuck image hold the row
-  }
-
-  if (!('IntersectionObserver' in window)) { whenLoaded(); return; }
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      observer.disconnect();
-      whenLoaded();
-    });
-  }, { rootMargin: '200px' });
-  observer.observe(marquee);
 }
 
 /* Shared lightbox. Wired whenever the markup is present, so the gallery tiles and
