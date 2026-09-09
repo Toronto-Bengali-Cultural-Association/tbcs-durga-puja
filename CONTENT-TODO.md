@@ -96,9 +96,8 @@ EOF
 - [x] Contact email — tbcscanada@gmail.com
 - [x] City — North York, ON
 - [x] Org description blurb (footer + `about.html` intro) — from the real mission statement
-- [x] Real social links — Facebook group and Instagram, live in every footer and on
-      `contact.html`. No YouTube link exists, so that icon was removed rather than
-      left pointing nowhere.
+- [x] Real social links — Facebook group, Instagram, and the YouTube channel, live in
+      every page's footer.
 - [x] `contact.html` form now submits to `mailto:tbcscanada@gmail.com` — still opens
       the visitor's email client rather than sending silently. For real inbox
       delivery without a backend, consider wiring it to Formspree / Netlify Forms.
