@@ -167,18 +167,18 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
   since those already live in the footer. The page is now just the centred "Send a
   Message" card. Footer phone placeholders were removed site-wide as well, and the
   orphaned `.contact-info-*` CSS went with the column.
-- [x] **Contact form is live and posting to your Google Sheet.** Endpoint wired into
-      `data-endpoint` on the form in `contact.html`; submissions POST url-encoded and
-      the visitor gets a confirmation message. A hidden honeypot field named `Website`
-      catches bots — your script should discard any submission where it is non-empty.
-- [x] **Field names fixed.** The live Apps Script reads `e.parameter.fullName`,
-      `.email`, `.subject`, `.message`; the form had been sending `Name`, `Email`,
-      `Subject`, `Message`. `e.parameter` is case-sensitive, so every lookup came back
-      undefined and rows saved with only a timestamp. The inputs now match the script.
-- [ ] Delete the leftover test rows in the sheet (they all say TEST or VERIFY).
-- [ ] **Spam: the honeypot is only checked in the browser.** A bot posting straight to
-      the `/exec` URL skips it entirely. Two lines at the top of your `doPost` fix it:
-      `if (e.parameter.Website) return ContentService.createTextOutput('');`
+- [x] **Contact form is live**, posting to the Apps Script web app at the `/exec` URL
+      in `data-endpoint` on the form. The visitor gets a confirmation message.
+- [ ] **Switch the script to email instead of the sheet.** `contact-form.gs` now holds
+      an email version — paste it over your Code.gs, then Deploy -> Manage deployments
+      -> pencil -> Version: **New version** -> Deploy. Saving alone does nothing; the
+      web app keeps running the old code until a new version is published. The `/exec`
+      URL is unchanged, so the website needs no edit.
+      It also fixes two things in the current script: the honeypot is now checked
+      server-side (bots posting straight to `/exec` skip the browser check), and it
+      uses `getSheetByName` rather than `getActiveSheet`, which follows whichever tab
+      is selected and can start writing to the wrong one.
+- [ ] Delete the leftover test rows in the sheet (they say TEST or VERIFY).
 
 ## Optional polish (not required to launch)
 - [ ] Replace Playfair Display / Poppins Google Fonts if you'd prefer different

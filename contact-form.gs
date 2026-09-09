@@ -1,142 +1,131 @@
 /**
- * NOTE (live): the deployed web app is NOT this script — it was written
- * separately. This file is kept for the setup steps and as a reference
- * implementation.
+ * TBCS contact form -> email
+ * ==========================
  *
- * The live script reads e.parameter.fullName / .email / .subject / .message,
- * so the form's inputs are named to match. e.parameter lookups are
- * case-sensitive: the form originally sent Name/Email/Subject/Message, every
- * lookup returned undefined, and rows landed with only a timestamp.
+ * Google Apps Script, not part of the website. It receives contact-form
+ * submissions from tbcscanada.org and emails them to the address in TO.
  *
- * The form also sends a honeypot field named `Website`. The live script does
- * not check it, so bot posts straight to the endpoint are not filtered. To
- * add that, put this at the top of doPost:
- *     if (e.parameter.Website) return ContentService.createTextOutput('');
- */
-
-/**
- * TBCS contact form -> Google Sheet
- * =================================
- *
- * This is Google Apps Script, not part of the website. It receives submissions
- * from the contact page and appends them as rows to a spreadsheet you own.
+ * Replaces the earlier sheet-based version. The website needs no changes: it
+ * already posts the field names this reads, and redeploying keeps the same
+ * /exec URL.
  *
  * ---------------------------------------------------------------------------
- * SETUP (about 5 minutes, do it while signed in as tbcscanada@gmail.com)
+ * HOW TO INSTALL (signed in as tbcscanada@gmail.com)
  * ---------------------------------------------------------------------------
  *
- *  1. Go to https://sheets.new and create a spreadsheet.
- *     Name it something like "TBCS website messages".
+ *  1. Open your Apps Script project (from the sheet: Extensions -> Apps Script).
  *
- *  2. In that sheet: Extensions -> Apps Script. A code editor opens.
+ *  2. Select everything in Code.gs and replace it with this file. Save.
  *
- *  3. Delete whatever is in Code.gs and paste in this entire file. Save.
+ *  3. Deploy -> Manage deployments -> pencil (edit) icon
+ *       -> Version: **New version**   <-- the step people miss. Saving alone
+ *          changes nothing; the web app keeps serving the old code until you
+ *          publish a new version.
+ *       -> Deploy
  *
- *  4. Deploy -> New deployment.
- *       - Click the gear next to "Select type" and choose "Web app"
- *       - Description:      contact form
- *       - Execute as:       Me (tbcscanada@gmail.com)
- *       - Who has access:   Anyone            <-- must be "Anyone", not
- *                                                 "Anyone with Google account"
- *     Click Deploy.
+ *  4. First run only: Google asks for permission to send mail as you.
+ *     "Google hasn't verified this app" -> Advanced -> Go to <project>
+ *     (unsafe) -> Allow. Expected for your own scripts.
  *
- *  5. Google will ask you to authorize it. Because the script is yours and
- *     unverified, you will see "Google hasn't verified this app" — click
- *     "Advanced", then "Go to <project name> (unsafe)", then Allow. This is
- *     expected for your own scripts.
+ *  5. Send a test message from tbcscanada.org/contact.html, check the inbox.
  *
- *  6. Copy the Web app URL. It ends in /exec, like:
- *       https://script.google.com/macros/s/AKfy..../exec
+ * The /exec URL does not change, so nothing on the website needs updating.
  *
- *  7. Send me that URL and I will paste it into the contact page. (Or do it
- *     yourself: in contact.html, put it inside data-endpoint="" on the form.)
- *
- * Until step 7 is done the form falls back to opening the visitor's email
- * client, so nothing is silently lost in the meantime.
- *
- * If you ever change this script, you must Deploy -> Manage deployments ->
- * edit -> Version: New version, or the live site keeps running the old copy.
+ * ---------------------------------------------------------------------------
+ * NOTES
+ * ---------------------------------------------------------------------------
+ * - Replies work: reply-to is set to the address the visitor typed, so hitting
+ *   Reply in Gmail writes back to them rather than to yourself.
+ * - A consumer Gmail account can send about 100 emails/day from Apps Script.
+ *   Far above contact-form volume, but it is a real ceiling.
+ * - ALSO_LOG_TO_SHEET is off, per the request for email instead of a sheet.
+ *   The tradeoff is worth knowing: if a send ever fails (quota, outage) the
+ *   message is gone, whereas a sheet row is a durable record you can search
+ *   later. Set it to true to get both.
  */
 
-/** Where to send the heads-up email. Set to '' to turn notifications off. */
-var NOTIFY = 'tbcscanada@gmail.com';
+/** Where submissions are emailed. */
+var TO = 'tbcscanada@gmail.com';
 
-/** Tab within the spreadsheet that rows get appended to. */
+/** Also append each message to the spreadsheet as a backup record. */
+var ALSO_LOG_TO_SHEET = false;
+
+/** Tab used when ALSO_LOG_TO_SHEET is true. */
 var TAB = 'Messages';
 
 function doPost(e) {
-  // Two people submitting at the same instant could otherwise write to the
-  // same row, so serialise appends.
-  var lock = LockService.getScriptLock();
-  lock.waitLock(30000);
+  var p = (e && e.parameter) || {};
 
-  try {
-    var params = (e && e.parameter) || {};
-
-    // The website's honeypot field. Real visitors never see it, so anything
-    // in it is a bot — accept the request and drop it on the floor.
-    if (params.Website) {
-      return json({ ok: true });
-    }
-
-    var name = String(params.Name || '').slice(0, 200);
-    var email = String(params.Email || '').slice(0, 200);
-    var subject = String(params.Subject || '').slice(0, 300);
-    var message = String(params.Message || '').slice(0, 5000);
-
-    if (!name && !email && !message) {
-      return json({ ok: false, error: 'empty submission' });
-    }
-
-    var sheet = getSheet_();
-    sheet.appendRow([new Date(), name, email, subject, message]);
-
-    if (NOTIFY) {
-      // Never let a mail failure (e.g. daily quota) lose the row itself.
-      try {
-        MailApp.sendEmail({
-          to: NOTIFY,
-          subject: 'tbcscanada.org — message from ' + (name || 'someone'),
-          replyTo: email || undefined,
-          body: [
-            'Name:    ' + name,
-            'Email:   ' + email,
-            'Subject: ' + subject,
-            '',
-            message,
-            '',
-            '— sent from the contact form on tbcscanada.org'
-          ].join('\n')
-        });
-      } catch (mailErr) {
-        // row is already saved; nothing more to do
-      }
-    }
-
-    return json({ ok: true });
-  } catch (err) {
-    return json({ ok: false, error: String(err) });
-  } finally {
-    lock.releaseLock();
+  // Honeypot: the form has a hidden field named Website that people never see.
+  // Anything in it is a bot. Accept the request so it does not retry, drop it.
+  if (p.Website) {
+    return json({ status: 'success' });
   }
+
+  var fullName = trim_(p.fullName, 200);
+  var email    = trim_(p.email, 200);
+  var subject  = trim_(p.subject, 300);
+  var message  = trim_(p.message, 5000);
+
+  if (!fullName && !email && !message) {
+    return json({ status: 'ignored', reason: 'empty submission' });
+  }
+
+  var options = {
+    to: TO,
+    name: 'TBCS website',
+    subject: 'tbcscanada.org — ' + (subject || 'message') + ' — from ' + (fullName || 'someone'),
+    body: [
+      'Name:    ' + (fullName || '(not given)'),
+      'Email:   ' + (email || '(not given)'),
+      'Subject: ' + (subject || '(not given)'),
+      '',
+      message,
+      '',
+      '---',
+      'Sent from the contact form on tbcscanada.org'
+    ].join('\n')
+  };
+
+  // Only set replyTo for a plausible address — MailApp throws on a malformed
+  // one, which would lose an otherwise good message.
+  if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    options.replyTo = email;
+  }
+
+  MailApp.sendEmail(options);
+
+  if (ALSO_LOG_TO_SHEET) {
+    try {
+      appendRow_(fullName, email, subject, message);
+    } catch (err) {
+      // The email is already sent; a logging failure must not fail the request.
+    }
+  }
+
+  return json({ status: 'success' });
 }
 
-/** Visiting the /exec URL in a browser should say something friendly. */
+/** Visiting the /exec URL in a browser answers here. */
 function doGet() {
-  return ContentService
-    .createTextOutput('TBCS contact endpoint is running.')
-    .setMimeType(ContentService.MimeType.TEXT);
+  return json({ status: 'ok' });
 }
 
-function getSheet_() {
+function trim_(v, max) {
+  return String(v == null ? '' : v).trim().slice(0, max);
+}
+
+function appendRow_(fullName, email, subject, message) {
   var book = SpreadsheetApp.getActiveSpreadsheet();
+  // Named lookup rather than getActiveSheet(), which follows whichever tab
+  // happens to be selected and can silently start writing to the wrong one.
   var sheet = book.getSheetByName(TAB) || book.insertSheet(TAB);
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Received', 'Name', 'Email', 'Subject', 'Message']);
-    sheet.getRange('A1:E1').setFontWeight('bold');
+    sheet.appendRow(['Timestamp', 'Full Name', 'Email', 'Subject', 'Message']);
+    sheet.getRange(1, 1, 1, 5).setFontWeight('bold');
     sheet.setFrozenRows(1);
   }
-  return sheet;
+  sheet.appendRow([new Date(), fullName, email, subject, message]);
 }
 
 function json(obj) {
