@@ -23,11 +23,16 @@
  *          publish a new version.
  *       -> Deploy
  *
- *  4. First run only: Google asks for permission to send mail as you.
- *     "Google hasn't verified this app" -> Advanced -> Go to <project>
- *     (unsafe) -> Allow. Expected for your own scripts.
+ *  4. AUTHORIZE THE MAIL SCOPE. Sending email needs a permission the old
+ *     sheet-only script never asked for, and *redeploying does not prompt for
+ *     it*. Until you grant it the form fails with:
+ *         "You do not have permission to call MailApp.sendEmail"
+ *     To grant it: in the editor, pick `sendTestEmail` from the function
+ *     dropdown next to Run, and click Run. Google shows "Google hasn't
+ *     verified this app" -> Advanced -> Go to <project> (unsafe) -> Allow.
+ *     A test email lands in TO, which confirms sending works.
  *
- *  5. Send a test message from tbcscanada.org/contact.html, check the inbox.
+ *  5. Send a real message from tbcscanada.org/contact.html, check the inbox.
  *
  * The /exec URL does not change, so nothing on the website needs updating.
  *
@@ -109,6 +114,21 @@ function doPost(e) {
 /** Visiting the /exec URL in a browser answers here. */
 function doGet() {
   return json({ status: 'ok' });
+}
+
+/**
+ * Run this once from the editor to grant the mail permission (see step 4).
+ * Sending email needs the script.send_mail scope, which the sheet-only version
+ * never required — and publishing a deployment does not ask for it. Running any
+ * function that calls MailApp does.
+ */
+function sendTestEmail() {
+  MailApp.sendEmail({
+    to: TO,
+    name: 'TBCS website',
+    subject: 'TBCS contact form — permission check',
+    body: 'If you are reading this, the script can send email and the contact form is ready.'
+  });
 }
 
 function trim_(v, max) {

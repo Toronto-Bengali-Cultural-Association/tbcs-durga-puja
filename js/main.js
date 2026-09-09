@@ -148,7 +148,13 @@ function initContactForm() {
     // not answer — and Apps Script only fills e.parameter reliably for this
     // encoding, not for the multipart body FormData would send.
     fetch(endpoint, { method: 'POST', body: new URLSearchParams(new FormData(form)) })
-      .then(() => {
+      .then((res) => res.text())
+      .then((text) => {
+        // Apps Script reports script errors as an HTML page with HTTP 200, so a
+        // resolved fetch proves nothing. Only trust an explicit success.
+        let ok = false;
+        try { ok = JSON.parse(text).status === 'success'; } catch (err) { ok = false; }
+        if (!ok) throw new Error('endpoint did not report success');
         form.reset();
         setStatus('Thanks — we got your message and will reply by email.', 'ok');
       })
