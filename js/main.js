@@ -129,10 +129,12 @@ function initContactForm() {
       return;
     }
 
-    // Until the Sheet endpoint is configured, hand off to the visitor's mail client
-    // rather than silently dropping the message.
+    // No endpoint configured — hand off to the visitor's mail client. Say so out
+    // loud: if they have no mail app registered, setting location.href does
+    // nothing visible, and silence reads as a broken form.
     if (!endpoint) {
       const body = `${value('Message')}\n\n— ${value('Name')} (${value('Email')})`;
+      setStatus('Opening your email app… if nothing happens, please write to tbcscanada@gmail.com directly.', '');
       window.location.href =
         `mailto:tbcscanada@gmail.com?subject=${encodeURIComponent(value('Subject') || 'Message from tbcscanada.org')}` +
         `&body=${encodeURIComponent(body)}`;
