@@ -183,7 +183,7 @@ date ranges like Oct 10-11 are fine.
       with online card payments marked coming soon), then Where Your Donation Goes,
       Become a Sponsor, the sponsor banner slideshow, and Become a Volunteer.
       The "Questions? / Contact Us" section was removed.
-- [x] 33 sponsor banners in `images/sponsors/`, pulled from **both** decks. The PPTX
+- [x] 32 sponsor banners in `images/sponsors/`, pulled from **both** decks. The PPTX
       gave 21; the PDF held 13 more (one later dropped) that the PPTX did not have, so the
       two exports are largely different sponsor sets — only 4 banners appear in both.
       In each case the artwork was taken from images that appear on a single
@@ -196,8 +196,9 @@ date ranges like Oct 10-11 are fine.
 - The Durga Pujo page's placeholder sponsor tiles were removed; this row replaces them.
 - Duplicates left as-is on purpose: a few businesses appear twice with different
   artwork from the two decks. Confirmed fine to keep both.
-- The "Durga Puja 2024 / Bhajans by Mala Gandhi" event poster was dropped — it was a
-  poster rather than a sponsor ad. 33 banners remain.
+- Dropped: the "Durga Puja 2024 / Bhajans by Mala Gandhi" event poster (a poster, not
+  a sponsor ad) and the duplicate Arun Ganguly banner, keeping the version without the
+  large green rebate band. 32 banners remain.
 - [ ] **Sponsorship tiers.** The deck has Gold / Silver / Bronze but nothing says what
       each includes or costs — tell me and I'll list them under Become a Sponsor.
 - [ ] Some banners are from past years (one reads "Durga Puja 2025"). Confirm which
