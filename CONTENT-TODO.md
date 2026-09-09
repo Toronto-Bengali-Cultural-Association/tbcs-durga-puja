@@ -176,18 +176,16 @@ EOF
       with online card payments marked coming soon), then Where Your Donation Goes,
       Become a Sponsor, the sponsor banner slideshow, and Become a Volunteer.
       The "Questions? / Contact Us" section was removed.
-- [x] 34 sponsor banners in `images/sponsors/`, pulled from **both** decks. The PPTX
-      gave 21; the PDF turned out to hold 13 more that the PPTX did not have, so the
+- [x] 33 sponsor banners in `images/sponsors/`, pulled from **both** decks. The PPTX
+      gave 21; the PDF held 13 more (one later dropped) that the PPTX did not have, so the
       two exports are largely different sponsor sets — only 4 banners appear in both.
       In each case the artwork was taken from images that appear on a single
       slide/page (the ones repeated across every page are the orange frame, drums,
       seal and tier ribbon), so no cropping was needed. Source decks are gitignored.
-- [ ] **Check for same-sponsor duplicates.** A few businesses appear twice with
-      different artwork across the two decks — Aastha Lawyers and Indranil Ghosh at
-      least, one portrait and one landscape. Tell me which version to keep.
-- [ ] **One banner is an event poster, not an ad**: "TBCS presents Durga Puja 2024,
-      Bhajans by Mala Gandhi" (`sponsor-24.jpg`). It sat in a sponsor slot in the deck,
-      so I kept it — say if it should go.
+- Duplicates left as-is on purpose: a few businesses appear twice with different
+  artwork from the two decks. Confirmed fine to keep both.
+- The "Durga Puja 2024 / Bhajans by Mala Gandhi" event poster was dropped — it was a
+  poster rather than a sponsor ad. 33 banners remain.
 - [ ] **Sponsorship tiers.** The deck has Gold / Silver / Bronze but nothing says what
       each includes or costs — tell me and I'll list them under Become a Sponsor.
 - [ ] Some banners are from past years (one reads "Durga Puja 2025"). Confirm which
