@@ -595,6 +595,10 @@ input:focus, textarea:focus {
 }
 textarea { resize: vertical; min-height: 130px; }
 
+/* inline links that should look clickable in body copy */
+.link-underline { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-decoration-color: var(--gold-500); transition: color 0.25s var(--ease); }
+.link-underline:hover { color: var(--maroon-700); text-decoration-color: var(--maroon-700); }
+
 .venue-map {
   display: block;
   width: 100%;
