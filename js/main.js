@@ -162,7 +162,6 @@ function initLightbox() {
   if (!items.length || !lightbox) return;
 
   const labelEl = lightbox.querySelector('[data-lightbox-label]');
-  const captionEl = lightbox.querySelector('[data-lightbox-caption]');
   const closeBtn = lightbox.querySelector('.lightbox-close');
   const photoEl = lightbox.querySelector('[data-lightbox-photo]');
   const placeholderEl = lightbox.querySelector('[data-lightbox-placeholder]');
@@ -171,7 +170,6 @@ function initLightbox() {
     const imgSrc = item.getAttribute('data-lightbox-img');
     const label = item.getAttribute('data-lightbox-label') || 'Photo';
     labelEl.textContent = label;
-    captionEl.textContent = item.getAttribute('data-lightbox-caption') || '';
     if (imgSrc && photoEl) {
       photoEl.src = imgSrc;
       photoEl.alt = label;

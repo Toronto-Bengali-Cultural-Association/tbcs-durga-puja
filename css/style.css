@@ -528,7 +528,6 @@ section { position: relative; padding: 88px 0; }
   cursor: pointer;
   line-height: 1;
 }
-.lightbox-caption { color: var(--cream-200); text-align: center; margin-top: 16px; font-size: 0.9rem; }
 
 /* -------------------- Committee cards -------------------- */
 .person-card { text-align: center; padding: 30px 22px; }
