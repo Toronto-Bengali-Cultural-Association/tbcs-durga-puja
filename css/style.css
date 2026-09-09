@@ -486,6 +486,7 @@ section { position: relative; padding: 88px 0; }
 /* one fixed height, free width — the banners run from tall flyers to wide
    business cards, and normalising the height is what makes the row read evenly */
 .sponsor-track img {
+  cursor: zoom-in;
   height: 190px;
   width: auto;
   flex: 0 0 auto;

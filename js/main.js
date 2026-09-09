@@ -259,16 +259,26 @@ function initSponsorShow() {
   }
 
   // Desktop drag — a mouse cannot swipe, and a trackpad user may not think to.
-  let down = false, startX = 0, startScroll = 0;
+  let down = false, startX = 0, startScroll = 0, dragged = false;
   marquee.addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'touch') return;      // native touch scrolling is better
-    down = true; startX = e.clientX; startScroll = marquee.scrollLeft;
+    down = true; dragged = false;
+    startX = e.clientX; startScroll = marquee.scrollLeft;
     paused = true;
-    marquee.classList.add('is-dragging');
-    marquee.setPointerCapture(e.pointerId);
   });
   marquee.addEventListener('pointermove', (e) => {
     if (!down) return;
+    // Only treat it as a drag past a few pixels, so a slightly shaky click on a
+    // banner still opens it rather than being swallowed as a swipe.
+    if (!dragged && Math.abs(e.clientX - startX) > 4) {
+      dragged = true;
+      marquee.classList.add('is-dragging');
+      // Capture only once it is genuinely a drag: capturing on pointerdown
+      // retargets the click that follows a simple tap, and the banner would
+      // never receive it.
+      try { marquee.setPointerCapture(e.pointerId); } catch (err) { /* not capturable */ }
+    }
+    if (!dragged) return;
     e.preventDefault();
     marquee.scrollLeft = startScroll - (e.clientX - startX);
   });
@@ -281,6 +291,15 @@ function initSponsorShow() {
   }
   marquee.addEventListener('pointerup', release);
   marquee.addEventListener('pointercancel', release);
+
+  // Click a banner to see it full size. Delegated, because the row is cloned
+  // after this runs and the copies must be clickable too.
+  marquee.addEventListener('click', (e) => {
+    const img = e.target.closest('img');
+    if (!img || !lightboxOpen) return;
+    if (dragged) { dragged = false; return; }   // that click ended a swipe
+    lightboxOpen(img.currentSrc || img.src, 'Sponsor banner');
+  });
 
   // Widths are only real once the lazy-loaded banners are on screen and decoded.
   function whenLoaded() {
@@ -306,24 +325,24 @@ function initSponsorShow() {
   observer.observe(marquee);
 }
 
-/* Gallery lightbox */
+/* Shared lightbox. Wired whenever the markup is present, so the gallery tiles and
+   the sponsor banners can both call it instead of shipping two implementations. */
+let lightboxOpen = null;
+
 function initLightbox() {
-  const items = document.querySelectorAll('[data-lightbox]');
   const lightbox = document.querySelector('.lightbox');
-  if (!items.length || !lightbox) return;
+  if (!lightbox) return;
 
   const labelEl = lightbox.querySelector('[data-lightbox-label]');
   const closeBtn = lightbox.querySelector('.lightbox-close');
   const photoEl = lightbox.querySelector('[data-lightbox-photo]');
   const placeholderEl = lightbox.querySelector('[data-lightbox-placeholder]');
 
-  function open(item) {
-    const imgSrc = item.getAttribute('data-lightbox-img');
-    const label = item.getAttribute('data-lightbox-label') || 'Photo';
-    labelEl.textContent = label;
-    if (imgSrc && photoEl) {
-      photoEl.src = imgSrc;
-      photoEl.alt = label;
+  function open(src, label) {
+    if (labelEl) labelEl.textContent = label || 'Photo';
+    if (src && photoEl) {
+      photoEl.src = src;
+      photoEl.alt = label || '';
       photoEl.style.display = 'block';
       if (placeholderEl) placeholderEl.style.display = 'none';
     } else {
@@ -332,14 +351,25 @@ function initLightbox() {
     }
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
+    closeBtn && closeBtn.focus();
   }
   function close() {
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
+    if (photoEl) photoEl.src = '';
   }
 
-  items.forEach((item) => item.addEventListener('click', () => open(item)));
+  lightboxOpen = open;
+
+  document.querySelectorAll('[data-lightbox]').forEach((item) => {
+    item.addEventListener('click', () => open(
+      item.getAttribute('data-lightbox-img'),
+      item.getAttribute('data-lightbox-label') || 'Photo'
+    ));
+  });
   closeBtn && closeBtn.addEventListener('click', close);
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) close();
+  });
 }
