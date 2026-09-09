@@ -171,10 +171,14 @@ or the dashed gold boxes labeled "Placeholder" (images) to find every spot liste
       `data-endpoint` on the form in `contact.html`; submissions POST url-encoded and
       the visitor gets a confirmation message. A hidden honeypot field named `Website`
       catches bots — your script should discard any submission where it is non-empty.
-- [ ] **Delete the two test rows** I sent while wiring it up (both say "TEST ... safe
-      to delete"), and confirm the values landed in the right columns. The deployed
-      script is not the one in `contact-form.gs`, so I could not verify field mapping
-      from outside — the form sends Name, Email, Subject, Message, Website.
+- [x] **Field names fixed.** The live Apps Script reads `e.parameter.fullName`,
+      `.email`, `.subject`, `.message`; the form had been sending `Name`, `Email`,
+      `Subject`, `Message`. `e.parameter` is case-sensitive, so every lookup came back
+      undefined and rows saved with only a timestamp. The inputs now match the script.
+- [ ] Delete the leftover test rows in the sheet (they all say TEST or VERIFY).
+- [ ] **Spam: the honeypot is only checked in the browser.** A bot posting straight to
+      the `/exec` URL skips it entirely. Two lines at the top of your `doPost` fix it:
+      `if (e.parameter.Website) return ContentService.createTextOutput('');`
 
 ## Optional polish (not required to launch)
 - [ ] Replace Playfair Display / Poppins Google Fonts if you'd prefer different

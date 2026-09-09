@@ -1,10 +1,17 @@
 /**
- * NOTE (live): the deployed web app is NOT this script. The endpoint wired into
- * contact.html answers doGet with {"status":"ok"} and doPost with
- * {"status":"success"}, so it was written separately. This file is kept as
- * reference for the setup steps and as a known-good fallback implementation.
- * The form posts these fields, url-encoded: Name, Email, Subject, Message,
- * Website (a honeypot that should be discarded when non-empty).
+ * NOTE (live): the deployed web app is NOT this script — it was written
+ * separately. This file is kept for the setup steps and as a reference
+ * implementation.
+ *
+ * The live script reads e.parameter.fullName / .email / .subject / .message,
+ * so the form's inputs are named to match. e.parameter lookups are
+ * case-sensitive: the form originally sent Name/Email/Subject/Message, every
+ * lookup returned undefined, and rows landed with only a timestamp.
+ *
+ * The form also sends a honeypot field named `Website`. The live script does
+ * not check it, so bot posts straight to the endpoint are not filtered. To
+ * add that, put this at the top of doPost:
+ *     if (e.parameter.Website) return ContentService.createTextOutput('');
  */
 
 /**
