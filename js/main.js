@@ -169,57 +169,119 @@ function initContactForm() {
 /* Sponsor row — a plain horizontal scroller. No auto-scroll by design: the row
    is browsed by dragging, swiping, or the arrows. */
 function initSponsorShow() {
-  const marquee = document.querySelector('[data-sponsor-marquee]');
-  if (!marquee) return;
-  const track = marquee.querySelector('.sponsor-track');
-  if (!track || !track.children.length) return;
+  const show = document.querySelector('[data-sponsor-show]');
+  if (!show) return;
+  const strip = show.querySelector('.sponsor-strip');
+  const roll = show.querySelector('.sponsor-roll');
+  const stageImgs = show.querySelectorAll('.sponsor-stage img');
+  if (!strip || !roll || !roll.children.length || stageImgs.length < 2) return;
 
-  const wrap = marquee.closest('.sponsor-marquee-wrap');
-  if (wrap) {
-    const step = () => Math.max(220, marquee.clientWidth * 0.7);
-    wrap.querySelector('.prev').addEventListener('click', () =>
-      marquee.scrollBy({ left: -step(), behavior: 'smooth' }));
-    wrap.querySelector('.next').addEventListener('click', () =>
-      marquee.scrollBy({ left: step(), behavior: 'smooth' }));
-  }
+  const originals = Array.from(roll.children);
 
-  // Drag to scroll — a mouse cannot swipe, and a trackpad user may not think to.
-  let down = false, startX = 0, startScroll = 0, dragged = false;
-  marquee.addEventListener('pointerdown', (e) => {
-    if (e.pointerType === 'touch') return;      // native touch scrolling is better
-    down = true; dragged = false;
-    startX = e.clientX; startScroll = marquee.scrollLeft;
+  /* The roll is one set of banners followed by an identical copy, and the
+     keyframe shifts it by exactly -50%. That lands on a frame identical to the
+     start, so the loop never shows a seam or a jump back. The copy is hidden
+     from screen readers, which should hear the list once. */
+  originals.forEach((img) => {
+    const twin = img.cloneNode(true);
+    twin.setAttribute('aria-hidden', 'true');
+    twin.dataset.twin = '1';
+    roll.appendChild(twin);
   });
-  marquee.addEventListener('pointermove', (e) => {
-    if (!down) return;
-    // Only a drag past a few pixels, so a slightly shaky click on a banner still
-    // opens it rather than being swallowed as a swipe.
-    if (!dragged && Math.abs(e.clientX - startX) > 4) {
-      dragged = true;
-      marquee.classList.add('is-dragging');
-      // Capture only once it is genuinely a drag: capturing on pointerdown
-      // retargets the click that follows a plain tap, and the banner would
-      // never receive it.
-      try { marquee.setPointerCapture(e.pointerId); } catch (err) { /* not capturable */ }
+
+  /* Pace is set per banner rather than in pixels per second. Every slot is the
+     same width and one loop is exactly one set, so each banner holds the stage
+     for the same stretch no matter what shape its artwork is, and adding a
+     sponsor later lengthens the loop instead of speeding everything up. */
+  const SECONDS_EACH = 7;
+  roll.style.animationDuration = (originals.length * SECONDS_EACH) + 's';
+
+  /* Start somewhere random in the loop so the same sponsors are not always the
+     ones a visitor sees first. A negative delay drops straight into the middle
+     of the animation, and snapping it to a whole banner means it lands on one
+     squarely instead of mid-slide. */
+  const startAt = Math.floor(Math.random() * originals.length);
+  roll.style.animationDelay = '-' + (startAt * SECONDS_EACH) + 's';
+
+  // Whichever banner is passing the middle of the strip is the one blown up
+  // above it. Two stage images swapped back and forth give the crossfade.
+  let frontIsA = true;
+  let currentSrc = '';
+  let firstPick = true;
+  function feature(img) {
+    const src = img.currentSrc || img.src;
+    if (!src || src === currentSrc) return;
+    currentSrc = src;
+
+    /* The markup names a banner so the stage is not blank without JS, but the
+       roll now starts at a random point, so that is rarely the right one.
+       Write over it in place the first time rather than crossfading, which
+       would show the markup's banner fading out on every load. */
+    if (firstPick) {
+      firstPick = false;
+      stageImgs[0].src = src;
+      stageImgs[0].alt = img.alt || 'Sponsor banner';
+      img.classList.add('is-featured');
+      return;
     }
-    if (!dragged) return;
-    e.preventDefault();
-    marquee.scrollLeft = startScroll - (e.clientX - startX);
-  });
-  function release(e) {
-    if (!down) return;
-    down = false;
-    marquee.classList.remove('is-dragging');
-    try { marquee.releasePointerCapture(e.pointerId); } catch (err) { /* already gone */ }
-  }
-  marquee.addEventListener('pointerup', release);
-  marquee.addEventListener('pointercancel', release);
 
-  // Click a banner to see it full size.
-  marquee.addEventListener('click', (e) => {
+    const incoming = frontIsA ? stageImgs[1] : stageImgs[0];
+    const outgoing = frontIsA ? stageImgs[0] : stageImgs[1];
+    incoming.src = src;
+    incoming.alt = img.alt || 'Sponsor banner';
+    incoming.removeAttribute('aria-hidden');
+    incoming.classList.add('is-current');
+    outgoing.classList.remove('is-current');
+    outgoing.setAttribute('aria-hidden', 'true');
+    frontIsA = !frontIsA;
+
+    roll.querySelectorAll('.is-featured').forEach((el) => el.classList.remove('is-featured'));
+    img.classList.add('is-featured');
+  }
+
+  let queued = false;
+  function pickCentre() {
+    queued = false;
+    const box = strip.getBoundingClientRect();
+    if (!box.width) return;
+    const mid = box.left + box.width / 2;
+    let best = null, bestGap = Infinity;
+    for (const img of roll.children) {
+      const r = img.getBoundingClientRect();
+      // Skip anything parked off to the side; only the visible run matters.
+      if (r.right < box.left || r.left > box.right) continue;
+      const gap = Math.abs(r.left + r.width / 2 - mid);
+      if (gap < bestGap) { bestGap = gap; best = img; }
+    }
+    if (best) feature(best);
+  }
+
+  // Sampled on a timer rather than every frame: the banner under the middle
+  // changes every few seconds, so 60fps of getBoundingClientRect is wasted work.
+  let timer = 0;
+  function start() {
+    if (timer) return;
+    timer = setInterval(() => {
+      if (document.hidden || queued) return;
+      queued = true;
+      requestAnimationFrame(pickCentre);
+    }, 250);
+  }
+  function stop() { clearInterval(timer); timer = 0; }
+
+  if (window.IntersectionObserver) {
+    new IntersectionObserver((entries) => {
+      entries[0].isIntersecting ? start() : stop();
+    }).observe(show);
+  } else {
+    start();
+  }
+  pickCentre();
+
+  // Click any banner, in the strip or on the stage, to see it full size.
+  show.addEventListener('click', (e) => {
     const img = e.target.closest('img');
     if (!img || !lightboxOpen) return;
-    if (dragged) { dragged = false; return; }   // that click ended a swipe
     lightboxOpen(img.currentSrc || img.src, 'Sponsor banner');
   });
 }
