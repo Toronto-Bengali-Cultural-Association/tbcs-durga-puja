@@ -232,22 +232,13 @@ function initLightbox() {
   const lightbox = document.querySelector('.lightbox');
   if (!lightbox) return;
 
-  const labelEl = lightbox.querySelector('[data-lightbox-label]');
   const closeBtn = lightbox.querySelector('.lightbox-close');
   const photoEl = lightbox.querySelector('[data-lightbox-photo]');
-  const placeholderEl = lightbox.querySelector('[data-lightbox-placeholder]');
 
   function open(src, label) {
-    if (labelEl) labelEl.textContent = label || 'Photo';
-    if (src && photoEl) {
-      photoEl.src = src;
-      photoEl.alt = label || '';
-      photoEl.style.display = 'block';
-      if (placeholderEl) placeholderEl.style.display = 'none';
-    } else {
-      if (photoEl) { photoEl.style.display = 'none'; photoEl.src = ''; }
-      if (placeholderEl) placeholderEl.style.display = '';
-    }
+    if (!src || !photoEl) return;
+    photoEl.src = src;
+    photoEl.alt = label || '';
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
     closeBtn && closeBtn.focus();
@@ -255,7 +246,8 @@ function initLightbox() {
   function close() {
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
-    if (photoEl) photoEl.src = '';
+    // removeAttribute, not src='': an empty src makes some browsers re-request the page
+    if (photoEl) photoEl.removeAttribute('src');
   }
 
   lightboxOpen = open;

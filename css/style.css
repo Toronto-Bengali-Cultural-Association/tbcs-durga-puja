@@ -395,41 +395,6 @@ section { position: relative; padding: 88px 0; }
 .card p { margin-bottom: 0; }
 
 /* -------------------- Placeholder blocks -------------------- */
-.ph-image {
-  position: relative;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  background: repeating-linear-gradient(135deg, var(--cream-300), var(--cream-300) 12px, var(--cream-200) 12px, var(--cream-200) 24px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: var(--maroon-700);
-  border: 1.5px dashed var(--gold-500);
-  min-height: 220px;
-}
-.ph-image .ph-label {
-  background: rgba(255,255,255,0.88);
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  max-width: 80%;
-}
-.ph-image .ph-tag {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: var(--marigold-500);
-  color: #fff;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 999px;
-}
 
 /* -------------------- Schedule (Events page) -------------------- */
 .schedule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
@@ -528,45 +493,10 @@ section { position: relative; padding: 88px 0; }
   height: 100%;
 }
 .gallery-item.tall { grid-row: span 2; }
-.gallery-item .ph-image {
-  min-height: 180px;
-  height: 100%;
-  border-radius: var(--radius-sm);
-  margin: 0;
-  align-items: flex-end;
-  padding-bottom: 16px;
-  transition: transform 0.5s var(--ease);
-}
-.gallery-item .ph-image .ph-label { max-width: 88%; }
-.gallery-item:hover .ph-image { transform: scale(1.04); }
-
-.gallery-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: var(--radius-sm);
-  display: block;
-  transition: transform 0.5s var(--ease);
-}
-.gallery-item:hover .gallery-photo { transform: scale(1.04); }
-
-.lightbox {
-  position: fixed;
-  inset: 0;
-  background: rgba(36, 16, 18, 0.92);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 500;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s var(--ease);
-  padding: 40px;
-}
-.lightbox.open { opacity: 1; pointer-events: auto; }
+.gallery-item .gallery-item .lightbox.open { opacity: 1; pointer-events: auto; }
 .lightbox-inner { max-width: 720px; width: 100%; }
-.lightbox-inner .ph-image { min-height: 420px; }
 .lightbox-photo {
+  display: block;
   display: none;
   width: 100%;
   max-height: 78vh;

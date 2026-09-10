@@ -1,5 +1,20 @@
 # Content To-Do — TBCS Durga Pujo Website
 
+## Status: no placeholders left on the site
+Every `[PLACEHOLDER]` marker and dashed placeholder box is gone. What remains below is
+either already done (kept as a record of where things came from) or a judgement call
+only the committee can make.
+
+### Worth confirming before you promote the site widely
+- **The venue tags "Free Parking", "Wheelchair Accessible", "Family Friendly"** on the
+  Durga Pujo page are still unverified. These are promises to visitors, and getting
+  step-free access or parking wrong can strand someone on the day. Confirm with Bodhi
+  Meditation, or say the word and I will remove them.
+- **Sponsorship tiers** under Become a Sponsor describe the benefits but not what each
+  tier costs or includes. Send me the details and I will list them.
+- **The sponsor row is past supporters**, honestly labelled as such. Prune it once the
+  2026 list is settled.
+
 ## Notes on images added so far
 - The `images/` folder has your original `.CR2` (Canon RAW) files kept as-is for
   archival purposes, plus web-ready `.jpg` versions I generated from them
