@@ -177,111 +177,190 @@ function initSponsorShow() {
   if (!strip || !roll || !roll.children.length || stageImgs.length < 2) return;
 
   const originals = Array.from(roll.children);
+  const count = originals.length;
 
-  /* The roll is one set of banners followed by an identical copy, and the
-     keyframe shifts it by exactly -50%. That lands on a frame identical to the
-     start, so the loop never shows a seam or a jump back. The copy is hidden
-     from screen readers, which should hear the list once. */
+  /* The roll holds the set twice. Scrolling past the end of the first copy is
+     rewound by exactly one set, which is invisible because the content there is
+     identical, so the row runs forever in either direction and dragging never
+     hits a wall. */
   originals.forEach((img) => {
     const twin = img.cloneNode(true);
     twin.setAttribute('aria-hidden', 'true');
-    twin.dataset.twin = '1';
     roll.appendChild(twin);
   });
 
-  /* Pace is set per banner rather than in pixels per second. Every slot is the
-     same width and one loop is exactly one set, so each banner holds the stage
-     for the same stretch no matter what shape its artwork is, and adding a
-     sponsor later lengthens the loop instead of speeding everything up. */
-  const SECONDS_EACH = 7;
-  roll.style.animationDuration = (originals.length * SECONDS_EACH) + 's';
+  const SECONDS_EACH = 7;   // how long each banner holds the stage
+  const slot = () => roll.scrollWidth / (count * 2);   // one banner plus its margin
+  const setWidth = () => roll.scrollWidth / 2;
 
-  /* Start somewhere random in the loop so the same sponsors are not always the
-     ones a visitor sees first. A negative delay drops straight into the middle
-     of the animation, and snapping it to a whole banner means it lands on one
-     squarely instead of mid-slide. */
-  const startAt = Math.floor(Math.random() * originals.length);
-  roll.style.animationDelay = '-' + (startAt * SECONDS_EACH) + 's';
+  // Start on a random banner so the same few are not always seen first.
+  let pos = Math.floor(Math.random() * count) * slot();
+  let target = null;        // where an arrow is taking us, eased toward
+  let lastWritten = -1;
+  let hovering = false, focused = false, dragging = false, touching = false;
+  let settleUntil = 0, onScreen = true, lastFrame = 0;
+
+  const settle = () => { settleUntil = performance.now() + 2000; };
+
+  function wrap() {
+    const w = setWidth();
+    if (w <= 0) return;
+    while (pos >= w) { pos -= w; if (target !== null) target -= w; }
+    while (pos < 0)  { pos += w; if (target !== null) target += w; }
+  }
+
+  /* Arrows move the same pos the drift does, eased by hand rather than with
+     scroll-behavior: smooth. Native smooth scrolling sets scrollLeft itself and
+     would be overwritten by this loop every frame. */
+  function nudge(dir) {
+    const step = Math.max(slot(), Math.round(strip.clientWidth * 0.7 / slot()) * slot());
+    target = (target === null ? pos : target) + dir * step;
+    settle();
+  }
+  const prev = show.querySelector('.sponsor-nav.prev');
+  const next = show.querySelector('.sponsor-nav.next');
+  prev && prev.addEventListener('click', () => nudge(-1));
+  next && next.addEventListener('click', () => nudge(1));
+
+  // Drag to scroll. A mouse cannot swipe and a trackpad user may not think to.
+  let downX = 0, downPos = 0, moved = false, down = false;
+  strip.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return;      // native touch scrolling is better
+    down = true; moved = false; dragging = false;
+    downX = e.clientX; downPos = pos; target = null;
+  });
+  strip.addEventListener('pointermove', (e) => {
+    if (!down) return;
+    // Past a few pixels only, so a slightly shaky click still opens the banner
+    // instead of being swallowed as a swipe.
+    if (!moved && Math.abs(e.clientX - downX) > 4) {
+      moved = true; dragging = true;
+      strip.classList.add('is-dragging');
+      // Capture only once it is genuinely a drag: capturing on pointerdown
+      // retargets the click that follows a tap and the banner never gets it.
+      try { strip.setPointerCapture(e.pointerId); } catch (err) { /* not capturable */ }
+    }
+    if (!moved) return;
+    e.preventDefault();
+    pos = downPos - (e.clientX - downX);
+    wrap();
+  });
+  function release(e) {
+    if (!down) return;
+    down = false; dragging = false;
+    strip.classList.remove('is-dragging');
+    try { strip.releasePointerCapture(e.pointerId); } catch (err) { /* already gone */ }
+    settle();
+  }
+  strip.addEventListener('pointerup', release);
+  strip.addEventListener('pointercancel', release);
+
+  // Touch and the wheel scroll the container natively. Step back and read the
+  // position back off it rather than writing over what the browser is doing.
+  strip.addEventListener('touchstart', () => { touching = true; target = null; }, { passive: true });
+  strip.addEventListener('touchend', () => { touching = false; settle(); }, { passive: true });
+
+  strip.addEventListener('pointerenter', () => { hovering = true; });
+  strip.addEventListener('pointerleave', () => { hovering = false; settle(); });
+  strip.addEventListener('focusin', () => { focused = true; });
+  strip.addEventListener('focusout', () => { focused = false; settle(); });
+
+  if (window.IntersectionObserver) {
+    new IntersectionObserver((e) => { onScreen = e[0].isIntersecting; }).observe(show);
+  }
+
+  const stillWanted = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Whichever banner is passing the middle of the strip is the one blown up
   // above it. Two stage images swapped back and forth give the crossfade.
-  let frontIsA = true;
-  let currentSrc = '';
-  let firstPick = true;
+  let frontIsA = true, currentSrc = '', firstPick = true;
   function feature(img) {
     const src = img.currentSrc || img.src;
     if (!src || src === currentSrc) return;
     currentSrc = src;
 
     /* The markup names a banner so the stage is not blank without JS, but the
-       roll now starts at a random point, so that is rarely the right one.
-       Write over it in place the first time rather than crossfading, which
-       would show the markup's banner fading out on every load. */
+       roll starts at a random point, so that is rarely the right one. Write
+       over it in place the first time rather than crossfading, which would
+       show the markup's banner fading out on every load. */
     if (firstPick) {
       firstPick = false;
       stageImgs[0].src = src;
       stageImgs[0].alt = img.alt || 'Sponsor banner';
-      img.classList.add('is-featured');
-      return;
+    } else {
+      const incoming = frontIsA ? stageImgs[1] : stageImgs[0];
+      const outgoing = frontIsA ? stageImgs[0] : stageImgs[1];
+      incoming.src = src;
+      incoming.alt = img.alt || 'Sponsor banner';
+      incoming.removeAttribute('aria-hidden');
+      incoming.classList.add('is-current');
+      outgoing.classList.remove('is-current');
+      outgoing.setAttribute('aria-hidden', 'true');
+      frontIsA = !frontIsA;
     }
-
-    const incoming = frontIsA ? stageImgs[1] : stageImgs[0];
-    const outgoing = frontIsA ? stageImgs[0] : stageImgs[1];
-    incoming.src = src;
-    incoming.alt = img.alt || 'Sponsor banner';
-    incoming.removeAttribute('aria-hidden');
-    incoming.classList.add('is-current');
-    outgoing.classList.remove('is-current');
-    outgoing.setAttribute('aria-hidden', 'true');
-    frontIsA = !frontIsA;
-
     roll.querySelectorAll('.is-featured').forEach((el) => el.classList.remove('is-featured'));
     img.classList.add('is-featured');
   }
 
-  let queued = false;
   function pickCentre() {
-    queued = false;
     const box = strip.getBoundingClientRect();
     if (!box.width) return;
     const mid = box.left + box.width / 2;
     let best = null, bestGap = Infinity;
     for (const img of roll.children) {
       const r = img.getBoundingClientRect();
-      // Skip anything parked off to the side; only the visible run matters.
-      if (r.right < box.left || r.left > box.right) continue;
+      if (r.right < box.left || r.left > box.right) continue;   // off to the side
       const gap = Math.abs(r.left + r.width / 2 - mid);
       if (gap < bestGap) { bestGap = gap; best = img; }
     }
     if (best) feature(best);
   }
 
-  // Sampled on a timer rather than every frame: the banner under the middle
-  // changes every few seconds, so 60fps of getBoundingClientRect is wasted work.
-  let timer = 0;
-  function start() {
-    if (timer) return;
-    timer = setInterval(() => {
-      if (document.hidden || queued) return;
-      queued = true;
-      requestAnimationFrame(pickCentre);
-    }, 250);
-  }
-  function stop() { clearInterval(timer); timer = 0; }
+  let sinceCheck = 0;
+  function tick(now) {
+    requestAnimationFrame(tick);
+    const dt = lastFrame ? (now - lastFrame) / 1000 : 0;
+    lastFrame = now;
+    if (!dt || dt > 0.25) return;      // first frame, or back from a background tab
 
-  if (window.IntersectionObserver) {
-    new IntersectionObserver((entries) => {
-      entries[0].isIntersecting ? start() : stop();
-    }).observe(show);
-  } else {
-    start();
+    if (touching) {
+      // The browser owns scrollLeft mid-swipe, including the momentum after it.
+      pos = strip.scrollLeft;
+    } else {
+      // Anything else that moved it, a wheel or a keypress, wins over our drift.
+      if (lastWritten >= 0 && Math.abs(strip.scrollLeft - lastWritten) > 1) {
+        pos = strip.scrollLeft;
+        target = null;
+        settle();
+      }
+      if (target !== null) {
+        pos += (target - pos) * Math.min(1, dt * 6);
+        if (Math.abs(target - pos) < 0.5) { pos = target; target = null; }
+      } else if (!dragging && !hovering && !focused && onScreen
+                 && !document.hidden && !stillWanted && now >= settleUntil) {
+        pos += (slot() / SECONDS_EACH) * dt;
+      }
+      wrap();
+      strip.scrollLeft = pos;
+      lastWritten = strip.scrollLeft;
+    }
+
+    // The banner under the middle changes every few seconds, so checking every
+    // frame would be wasted work.
+    sinceCheck += dt;
+    if (sinceCheck > 0.2) { sinceCheck = 0; pickCentre(); }
   }
+  strip.scrollLeft = pos;
+  lastWritten = strip.scrollLeft;
   pickCentre();
+  requestAnimationFrame(tick);
 
   // Click any banner, in the strip or on the stage, to see it full size.
   show.addEventListener('click', (e) => {
     const img = e.target.closest('img');
     if (!img || !lightboxOpen) return;
+    if (moved) { moved = false; return; }        // that click ended a drag
     lightboxOpen(img.currentSrc || img.src, 'Sponsor banner');
   });
 }

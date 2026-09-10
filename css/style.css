@@ -461,23 +461,53 @@ section { position: relative; padding: 88px 0; }
 }
 .sponsor-stage img.is-current { opacity: 1; pointer-events: auto; }
 
+.sponsor-strip-wrap { position: relative; }
+/* A real scroll container, not a transformed track: the drift and the visitor's
+   own dragging are then the same motion on the same property, so they can never
+   fight each other. JS advances scrollLeft and wraps it at one set. */
 .sponsor-strip {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
   /* Room for the featured banner to scale up without overflow clipping it. */
   padding: 8px 0;
   /* Fade both ends so banners enter and leave instead of being cut off. */
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
+.sponsor-strip::-webkit-scrollbar { display: none; }
+.sponsor-strip.is-dragging { cursor: grabbing; }
+.sponsor-strip.is-dragging img { pointer-events: none; }
 .sponsor-roll {
   display: flex;
   align-items: center;
   width: max-content;
-  animation: sponsor-roll 224s linear infinite;   /* 32 banners x 7s, reset in JS */
 }
-/* Hovering or tabbing in holds the roll, so a banner can be read or clicked. */
-.sponsor-strip:hover .sponsor-roll,
-.sponsor-strip:focus-within .sponsor-roll { animation-play-state: paused; }
+.sponsor-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--maroon-800);
+  color: var(--cream-100);
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  z-index: 2;
+  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.sponsor-nav:hover { background: var(--marigold-500); transform: translateY(-50%) scale(1.06); }
+.sponsor-nav.prev { left: -14px; }
+.sponsor-nav.next { right: -14px; }
 
 /* The margin rides on each banner rather than a flex gap: the track is exactly
    two copies of the set, so translating by -50% lands on an identical frame and
@@ -508,17 +538,6 @@ section { position: relative; padding: 88px 0; }
 .sponsor-roll img.is-featured {
   opacity: 1;
   transform: scale(1.06);
-}
-@keyframes sponsor-roll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* Asked for less motion: the roll stops and the strip becomes a normal
-   scrollable row, which still reaches every banner. */
-@media (prefers-reduced-motion: reduce) {
-  .sponsor-roll { animation: none; }
-  .sponsor-strip { overflow-x: auto; scrollbar-width: thin; }
 }
 
 .sponsor-hint { text-align: center; margin-top: 14px; font-size: 0.8rem; color: var(--text-muted); }
@@ -766,6 +785,7 @@ textarea { resize: vertical; min-height: 130px; }
   .role-list { grid-template-columns: 1fr; }
   .sponsor-stage { height: 210px; margin-bottom: 18px; }
   .sponsor-roll img { width: 165px; height: 130px; padding: 6px; margin-right: 14px; }
+  .sponsor-nav { display: none; }   /* swipe instead */
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .form-grid { grid-template-columns: 1fr; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
