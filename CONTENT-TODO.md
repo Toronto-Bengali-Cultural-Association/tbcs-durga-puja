@@ -52,8 +52,8 @@ only the committee can make.
 ## Confirmed real info (from the schedule flyer, `images/schedule-2026.jpg`)
 - Full hour-by-hour ritual schedule for both days (Shastir Bodhon through Bishorjon/
   Sindoor Khela) is transcribed into `events.html`'s schedule section, with the flyer
-  image itself embedded below as a printable/shareable version. Homepage schedule
-  teaser cards updated to reference the confirmed times too.
+  image itself was later removed, since it reads "PUJA" and clashed with the renamed
+  copy; the text schedule carries the same information and is searchable.
 
 ## Confirmed real info (from the volunteer flyer, `images/volunteer-2026.jpg`)
 - Volunteer shift window (9 AM–10 PM both days), the seven role categories, and the
@@ -74,9 +74,6 @@ only the committee can make.
 - Worth double-checking the wording I lifted against your own copy — a couple of the
   objective blurbs were tightened for the web, and I want them to still be exactly
   what the committee wants to say.
-
-Everything below is still a placeholder. Search each file for `[PLACEHOLDER...]` (text)
-or the dashed gold boxes labeled "Placeholder" (images) to find every spot listed here.
 
 ## Sponsor row
 The banners do not auto-scroll, by choice. They are browsed with the arrows, by
@@ -119,16 +116,13 @@ date ranges like Oct 10-11 are fine.
 - [x] Org description blurb (footer + `about.html` intro) — from the real mission statement
 - [x] Real social links — Facebook group, Instagram, and the YouTube channel, live in
       every page's footer.
-- [x] `contact.html` form now submits to `mailto:tbcscanada@gmail.com` — still opens
-      the visitor's email client rather than sending silently. For real inbox
-      delivery without a backend, consider wiring it to Formspree / Netlify Forms.
+- [x] `contact.html` form posts to the Google Apps Script web app, which emails the
+      committee. Field names must match what the script reads (`fullName`, `email`,
+      `subject`, `message`) — `e.parameter` is case-sensitive.
 
 ## index.html (Home)
 - [x] Event dates, countdown target, venue, city — filled from the flyer
-- [ ] Hero description paragraph could be reworded once you confirm more program details
-- [ ] "Why join us" intro paragraph
-- [x] About-teaser paragraph — now the real mission; still needs a photo in place of
-      the dashed placeholder box beside it
+- [x] All homepage copy is real; the Our Story teaser has a photo of the pandal idol.
 - [x] Hero photo fixed on phones/tablets. Two separate problems: (1) the real bug —
       below 980px `.hero-art` collapsed to 0x0 and the photo did not render *at all*,
       because auto margins stop a grid item stretching and its only child is absolutely
