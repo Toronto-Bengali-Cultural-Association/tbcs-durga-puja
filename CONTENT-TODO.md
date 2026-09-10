@@ -137,8 +137,6 @@ date ranges like Oct 10-11 are fine.
       the Wix site doesn't tell it either. Worth writing down; if you do, the milestones
       timeline is worth rebuilding with real years.
 - [ ] Founding member photo
-- [ ] "Join Us" section (Volunteer / Sponsor / Donate cards) intro paragraph + each
-      card's blurb
 
 ## events.html (Durga Pujo page)
 - [x] Dates, venue name, address (info strip + venue section)
