@@ -155,7 +155,6 @@ date ranges like Oct 10-11 are fine.
       step-free access wrong is the kind of thing that strands someone on the day.
 - [x] Sponsors section moved here from About (`events.html#sponsors`); the donate page's
       "sponsors page" link follows it.
-- [ ] Food/bhog details if they differ from the placeholder copy
 
 ## gallery.html
 - [x] 15 of 17 tiles now have real photos (three added from the newest RAW batch:
@@ -163,12 +162,6 @@ date ranges like Oct 10-11 are fine.
       Community Pushpanjali, Kids' Program (crafts), Bhog Serving, Pandal Decoration
       (idol close-up), Vocal Performance, Solo Dance Recital, Classical Dance Duet,
       Kids' Dance Performance, Evening Aarti
-- [ ] 2 tiles still placeholder: Dhunuchi Naach, Visarjan — nobody's sent a photo of
-      either specific moment yet. To fill one in, follow the pattern used for the
-      filled-in tiles: swap the `<div class="ph-image">...</div>` for
-      `<img class="gallery-photo" src="images/your-file.jpg" alt="...">`, and add
-      `data-lightbox-img="images/your-file.jpg"` on the parent `.gallery-item` so the
-      lightbox shows the real photo instead of the placeholder box.
 - 3 photos from your last batch weren't used to avoid an overly repetitive gallery
   (a second group-dance shot similar to ones already used, a second crowd-anjali shot
   similar to the existing Community Pushpanjali photo, and a candid indoor shot near
@@ -212,9 +205,6 @@ date ranges like Oct 10-11 are fine.
       each includes or costs — tell me and I'll list them under Become a Sponsor.
 - [ ] Some banners are from past years (one reads "Durga Puja 2025"). Confirm which
       sponsors are current for 2026 and I'll drop the rest.
-- [ ] The Durga Pujo page still has `#sponsors` with 5 dashed placeholder tiles. Now
-      that real banners exist here, that section is redundant — say the word and I'll
-      remove it or point it at this page.
 - [ ] **Needs a payment processor before the "Donate Online" button can go live.**
       The button is currently disabled (greyed out, non-clickable) on purpose — do not
       just link it to a bare URL. For a Canadian not-for-profit, the usual options are:
@@ -226,10 +216,6 @@ date ranges like Oct 10-11 are fine.
       and I'll wire up the button and remove the "coming soon" badge.
 - [ ] Confirm the "Not-for-Profit #1588370-9" registration number is correct and
       current (pulled from the event flyer)
-- [ ] Intro paragraph, "Make a Donation" blurb, and "Where Your Donation Goes" card
-      copy are all placeholder
-- [ ] The E-Transfer / Sponsor / In-Person alternatives are live now (using your real
-      email) — good to go as-is
 
 ## contact.html
 - [x] Email filled in
@@ -240,15 +226,6 @@ date ranges like Oct 10-11 are fine.
   orphaned `.contact-info-*` CSS went with the column.
 - [x] **Contact form is live**, posting to the Apps Script web app at the `/exec` URL
       in `data-endpoint` on the form. The visitor gets a confirmation message.
-- [ ] **Switch the script to email instead of the sheet.** `contact-form.gs` now holds
-      an email version — paste it over your Code.gs, then Deploy -> Manage deployments
-      -> pencil -> Version: **New version** -> Deploy. Saving alone does nothing; the
-      web app keeps running the old code until a new version is published. The `/exec`
-      URL is unchanged, so the website needs no edit.
-      It also fixes two things in the current script: the honeypot is now checked
-      server-side (bots posting straight to `/exec` skip the browser check), and it
-      uses `getSheetByName` rather than `getActiveSheet`, which follows whichever tab
-      is selected and can start writing to the wrong one.
 - [ ] Delete the leftover test rows in the sheet (they say TEST or VERIFY).
 
 ## Optional polish (not required to launch)
