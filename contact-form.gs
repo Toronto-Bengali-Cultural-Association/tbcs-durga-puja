@@ -32,9 +32,20 @@
  *     verified this app" -> Advanced -> Go to <project> (unsafe) -> Allow.
  *     A test email lands in TO, which confirms sending works.
  *
- *  5. Send a real message from tbcscanada.org/contact.html, check the inbox.
+ *  5. CONFIRM THE PASTE IS ACTUALLY LIVE. Open the /exec URL in a browser.
+ *     It answers with JSON containing a version field. If that is not the
+ *     VERSION string below, the deployment is still serving the old code and
+ *     nothing you do to the inbox will change. Two usual reasons:
+ *       - the version dropdown was left on the existing version instead of
+ *         'New version', so Deploy published the same code again;
+ *       - 'New deployment' was used instead of editing the existing one, which
+ *         mints a *different* /exec URL. The website still posts to the old
+ *         one, so the old code still runs. Either edit the original deployment
+ *         or put the new URL in contact.html.
  *
- *  6. Set up the Gmail filter described under MAKING THESE EASY TO SPOT below.
+ *  6. Send a real message from tbcscanada.org/contact.html, check the inbox.
+ *
+ *  7. Set up the Gmail filter described under MAKING THESE EASY TO SPOT below.
  *     The subject and preview changes help, but the filter is what stops these
  *     being missed, because the From column will always read 'me'.
  *
@@ -88,6 +99,16 @@
  *   message is gone, whereas a sheet row is a durable record you can search
  *   later. Set it to true to get both.
  */
+
+/**
+ * Bumped by hand whenever this file changes. Visiting the /exec URL in a
+ * browser shows it, which is the only way to tell from outside which code a
+ * deployment is actually serving. Saving the editor does not change what the
+ * web app runs, and a new deployment gets a new URL, so "I pasted it and it
+ * still behaves the old way" is normally one of those two. Check the URL: if
+ * the version below is not what comes back, the paste is not live.
+ */
+var VERSION = '2026-09-19-subject-preview';
 
 /** Where submissions are emailed. */
 var TO = 'tbcscanada@gmail.com';
@@ -168,9 +189,10 @@ function doPost(e) {
   return json({ status: 'success' });
 }
 
-/** Visiting the /exec URL in a browser answers here. */
+/** Visiting the /exec URL in a browser answers here. Reports VERSION so the
+ *  deployed code can be identified without sending a test email. */
 function doGet() {
-  return json({ status: 'ok' });
+  return json({ status: 'ok', version: VERSION });
 }
 
 /**
