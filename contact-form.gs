@@ -34,7 +34,47 @@
  *
  *  5. Send a real message from tbcscanada.org/contact.html, check the inbox.
  *
+ *  6. Set up the Gmail filter described under MAKING THESE EASY TO SPOT below.
+ *     The subject and preview changes help, but the filter is what stops these
+ *     being missed, because the From column will always read 'me'.
+ *
  * The /exec URL does not change, so nothing on the website needs updating.
+ *
+ * ---------------------------------------------------------------------------
+ * MAKING THESE EASY TO SPOT IN THE INBOX
+ * ---------------------------------------------------------------------------
+ * Enquiries were being missed. Three separate causes, and only two of them are
+ * fixable in this file.
+ *
+ * 1. THE SUBJECT (fixed here). Gmail shows roughly 70 characters of subject and
+ *    cuts the rest. The old line led with 'tbcscanada.org - ', so the visitor's
+ *    actual subject started 17 characters in and was often past the cut. It now
+ *    reads '[TBCS] Vendor Table (Monica Nagpal)'.
+ *
+ * 2. THE PREVIEW (fixed here). The grey snippet beside the subject is the start
+ *    of the body, which used to be Name/Email/Subject lines repeating what the
+ *    subject already said. The message now comes first, so the list row shows
+ *    what the person actually wrote.
+ *
+ * 3. THE SENDER SAYING 'me' (NOT fixable here). The script runs as
+ *    tbcscanada@gmail.com and sends to tbcscanada@gmail.com, and Gmail labels
+ *    anything from your own address 'me'. The `name` option below does not
+ *    override it. Two ways out, neither of them code in this file:
+ *
+ *      a. A GMAIL FILTER, which is the quick one and worth doing regardless.
+ *         Gmail -> Settings -> Filters and Blocked Addresses -> Create a new
+ *         filter. Put  [TBCS]  in the Subject box, Create filter, then tick
+ *         'Apply the label' (make one called Website) and 'Never send it to
+ *         Spam'. Ticking 'Always mark it as important' helps too. Enquiries
+ *         then arrive with a coloured label chip, and the Website label in the
+ *         sidebar shows an unread count. Tick 'Also apply to matching
+ *         conversations' to catch the ones already sitting in the inbox.
+ *
+ *      b. RUN THE SCRIPT FROM A SECOND GOOGLE ACCOUNT. Sending from an address
+ *         that is not tbcscanada@gmail.com is the only way the From column
+ *         stops saying 'me'. Copy this project into another account, deploy it
+ *         there, and put the new /exec URL in contact.html. More moving parts,
+ *         so only worth it if the filter is not enough.
  *
  * ---------------------------------------------------------------------------
  * NOTES
@@ -76,19 +116,36 @@ function doPost(e) {
     return json({ status: 'ignored', reason: 'empty submission' });
   }
 
+  /* Subject line, built to survive the inbox list rather than to read well on
+     its own. Gmail shows roughly 70 characters and cuts the rest, so the tag is
+     short and what the visitor typed comes first. The old line spent its first
+     17 characters on 'tbcscanada.org - ' and pushed the real subject past the
+     cut, which is how these got missed. [TBCS] is also the hook for a Gmail
+     filter, so it stays first and stays exactly this. */
+  var label = subject || 'Message';
+  if (label.length > 40) label = label.slice(0, 39) + '\u2026';
+  var who = fullName || 'someone';
+  if (who.length > 20) who = who.slice(0, 19) + '\u2026';
+  // 7 for the tag, 3 for the brackets and space: 40 + 20 + 10 caps the line at
+  // 70, which is about what Gmail shows before it cuts.
+
   var options = {
     to: TO,
     name: 'TBCS website',
-    subject: 'tbcscanada.org — ' + (subject || 'message') + ' — from ' + (fullName || 'someone'),
+    subject: '[TBCS] ' + label + ' (' + who + ')',
+    /* The message goes first. Gmail's preview snippet is the opening of the
+       body, and it used to be spent on Name/Email/Subject lines that repeat
+       what is already in the subject, so the list row never showed a word of
+       the actual enquiry. Details move below the rule, where they are still
+       one glance away once the mail is open. */
     body: [
-      'Name:    ' + (fullName || '(not given)'),
-      'Email:   ' + (email || '(not given)'),
-      'Subject: ' + (subject || '(not given)'),
-      '',
-      message,
+      message || '(no message)',
       '',
       '---',
-      'Sent from the contact form on tbcscanada.org'
+      'From:    ' + (fullName || '(name not given)') + (email ? ' <' + email + '>' : ''),
+      'Subject: ' + (subject || '(not given)'),
+      'Sent from the contact form on tbcscanada.org',
+      email ? 'Hit Reply to answer them directly.' : 'No address given, so Reply will not reach them.'
     ].join('\n')
   };
 
