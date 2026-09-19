@@ -60,7 +60,9 @@
  * 1. THE SUBJECT (fixed here). Gmail shows roughly 70 characters of subject and
  *    cuts the rest. The old line led with 'tbcscanada.org - ', so the visitor's
  *    actual subject started 17 characters in and was often past the cut. It now
- *    reads '[TBCS] Vendor Table (Monica Nagpal)'.
+ *    reads '[TBCS Website Contact Form] Vendor Table (Monica Nagpal)'. The
+ *    tag is deliberately long enough to read at a glance; what it costs in
+ *    subject room is paid back by fix 2, which puts the message in the preview.
  *
  * 2. THE PREVIEW (fixed here). The grey snippet beside the subject is the start
  *    of the body, which used to be Name/Email/Subject lines repeating what the
@@ -74,7 +76,8 @@
  *
  *      a. A GMAIL FILTER, which is the quick one and worth doing regardless.
  *         Gmail -> Settings -> Filters and Blocked Addresses -> Create a new
- *         filter. Put  [TBCS]  in the Subject box, Create filter, then tick
+ *         filter. Put  [TBCS Website Contact Form]  in the Subject box, Create
+ *         filter, then tick
  *         'Apply the label' (make one called Website) and 'Never send it to
  *         Spam'. Ticking 'Always mark it as important' helps too. Enquiries
  *         then arrive with a coloured label chip, and the Website label in the
@@ -108,7 +111,7 @@
  * still behaves the old way" is normally one of those two. Check the URL: if
  * the version below is not what comes back, the paste is not live.
  */
-var VERSION = '2026-09-19-subject-preview';
+var VERSION = '2026-09-19b-long-tag';
 
 /** Where submissions are emailed. */
 var TO = 'tbcscanada@gmail.com';
@@ -141,19 +144,21 @@ function doPost(e) {
      its own. Gmail shows roughly 70 characters and cuts the rest, so the tag is
      short and what the visitor typed comes first. The old line spent its first
      17 characters on 'tbcscanada.org - ' and pushed the real subject past the
-     cut, which is how these got missed. [TBCS] is also the hook for a Gmail
+     cut, which is how these got missed. The tag is also the hook for a Gmail
      filter, so it stays first and stays exactly this. */
   var label = subject || 'Message';
-  if (label.length > 40) label = label.slice(0, 39) + '\u2026';
+  if (label.length > 34) label = label.slice(0, 33) + '\u2026';
   var who = fullName || 'someone';
-  if (who.length > 20) who = who.slice(0, 19) + '\u2026';
-  // 7 for the tag, 3 for the brackets and space: 40 + 20 + 10 caps the line at
-  // 70, which is about what Gmail shows before it cuts.
+  if (who.length > 16) who = who.slice(0, 15) + '\u2026';
+  // The tag alone is 27 characters, so a long subject will still be cut on a
+  // narrow window. That is an accepted trade: the tag is what makes these
+  // recognisable at a glance, and the message itself now leads the preview
+  // line, so the content is visible even when the subject is not.
 
   var options = {
     to: TO,
     name: 'TBCS website',
-    subject: '[TBCS] ' + label + ' (' + who + ')',
+    subject: '[TBCS Website Contact Form] ' + label + ' (' + who + ')',
     /* The message goes first. Gmail's preview snippet is the opening of the
        body, and it used to be spent on Name/Email/Subject lines that repeat
        what is already in the subject, so the list row never showed a word of
