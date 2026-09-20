@@ -7,7 +7,7 @@
 <meta name="description" content="Donate, sponsor, or volunteer with Toronto Bengali Cultural Society, supporting Durga Pujo and year-round community work.">
 <link rel="icon" href="images/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="css/style.css?v=d4f385e1">
+<link rel="stylesheet" href="css/style.css?v=b2b322b8">
 </head>
 <body>
 
@@ -50,8 +50,30 @@
       <div class="section-head reveal">
         <span class="eyebrow">Donate</span>
         <h2>Ways to Give</h2>
-        <p>Online card payments are coming soon. Until then, any of these reach us directly.</p>
+        <p>Give online in a few seconds, or use any of the other routes below. Every dollar goes back into the Pujo and our year-round community work.</p>
       </div>
+
+      <!-- Card donations are handled entirely by Stripe's own hosted page. No
+           payment fields exist anywhere on this site, so there is nothing here
+           to intercept and nothing for us to store. rel="noopener noreferrer"
+           keeps the opened tab from touching this one and sends no referrer. -->
+      <div class="donate-panel reveal">
+        <h3>Donate Online</h3>
+        <p>Choose your own amount and pay by card, Apple&nbsp;Pay, or Google&nbsp;Pay. It takes under a minute.</p>
+        <a class="btn btn-primary" href="https://donate.stripe.com/8x200da1Wct45XL9d33Je00"
+           target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>
+          Donate Securely
+        </a>
+        <div class="donate-methods">
+          <span>Visa</span><span>Mastercard</span><span>Amex</span><span>Apple Pay</span><span>Google Pay</span>
+        </div>
+        <p class="donate-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+          <span>Your payment is completed on Stripe&rsquo;s own secure page. Card numbers are never typed into this website and TBCS never receives them. This site sets no cookies and runs no analytics or tracking of any kind.</span>
+        </p>
+      </div>
+
       <div class="grid grid-3">
         <div class="card reveal">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 7 8.5-7"/></svg></div>
@@ -71,10 +93,7 @@
       </div>
 
       <div class="reveal text-center" style="margin-top:36px;">
-        <div class="stream-status" style="background:var(--cream-200); color:var(--maroon-800);">
-          <span class="pulse-dot" style="background:var(--marigold-500);"></span> Online card donations coming soon
-        </div>
-        <div class="tag-list" style="justify-content:center; margin-top:20px;">
+        <div class="tag-list" style="justify-content:center;">
           <span class="tag">Not-for-Profit #1588370-9</span>
           <span class="tag">100% Volunteer-Run</span>
         </div>

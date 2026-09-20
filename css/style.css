@@ -432,6 +432,54 @@ section { position: relative; padding: 88px 0; }
 .info-card .label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
 .info-card .value { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--primary-dark); }
 
+/* -------------------- Donate panel -------------------- */
+.donate-panel {
+  max-width: 700px;
+  margin: 0 auto 46px;
+  padding: 40px 34px 34px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+.donate-panel h3 { font-size: 1.55rem; margin-bottom: 12px; }
+.donate-panel > p { max-width: 46ch; margin: 0 auto 26px; }
+.donate-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 24px 0 0;
+}
+.donate-methods span {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-alt);
+  border-radius: 999px;
+  padding: 6px 13px;
+}
+/* The reassurance sits left-aligned inside a centred panel on purpose: it is
+   the one part here meant to be read as sentences rather than scanned. */
+.donate-note {
+  display: flex;
+  gap: 11px;
+  max-width: 54ch;
+  margin: 26px auto 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--cream-300);
+  text-align: left;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+.donate-note svg { flex: 0 0 auto; margin-top: 3px; color: var(--gold-500); }
+@media (max-width: 600px) {
+  .donate-panel { padding: 30px 22px 26px; }
+}
+
 /* -------------------- Sponsor show -------------------- */
 /* An enlarged stage sitting on top of a strip that rolls on its own. Whichever
    banner is passing the middle of the strip is the one blown up above it. */
