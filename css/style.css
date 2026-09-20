@@ -444,16 +444,17 @@ section { position: relative; padding: 88px 0; }
   box-shadow: var(--shadow-md);
 }
 .donate-panel h3 { font-size: 1.55rem; margin-bottom: 12px; }
-.donate-panel > p { max-width: 46ch; margin: 0 auto 26px; }
+/* :not() keeps this off the note below, which is also a direct child p. Plain
+   ".donate-panel > p" outranks ".donate-note" on specificity, and silently took
+   over its margin and width. */
+.donate-panel > p:not(.donate-note) { max-width: 46ch; margin: 0 auto 26px; }
 /* The reassurance sits left-aligned inside a centred panel on purpose: it is
    the one part here meant to be read as sentences rather than scanned. */
 .donate-note {
   display: flex;
   gap: 11px;
   max-width: 54ch;
-  margin: 26px auto 0;
-  padding-top: 22px;
-  border-top: 1px solid var(--cream-300);
+  margin: 30px auto 0;
   text-align: left;
   font-size: 0.82rem;
   line-height: 1.65;
