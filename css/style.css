@@ -445,22 +445,6 @@ section { position: relative; padding: 88px 0; }
 }
 .donate-panel h3 { font-size: 1.55rem; margin-bottom: 12px; }
 .donate-panel > p { max-width: 46ch; margin: 0 auto 26px; }
-.donate-methods {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin: 24px 0 0;
-}
-.donate-methods span {
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  background: var(--bg-alt);
-  border-radius: 999px;
-  padding: 6px 13px;
-}
 /* The reassurance sits left-aligned inside a centred panel on purpose: it is
    the one part here meant to be read as sentences rather than scanned. */
 .donate-note {
@@ -847,4 +831,27 @@ textarea { resize: vertical; min-height: 130px; }
   .pujo-mark { width: 84px; height: 84px; }
   /* keep the date line on one line at 360px without dropping back to the old size */
   .hero .eyebrow { font-size: 0.82rem; letter-spacing: 0.04em; padding: 9px 12px; }
+
+  /* Phones were cramped on two counts at once, which is what made the pages
+     feel squeezed. */
+
+  /* 1. Chrome ate the width. The container's 24px and a card's 28px stack up,
+     so on a 375px screen a line inside a card had 271px to live in, about 34
+     characters. Trimming both gives it 299px without the page looking tight
+     against the bezel. */
+  .container { padding: 0 18px; }
+  .card { padding: 26px 20px; }
+  .donate-panel { padding: 28px 20px 24px; }
+
+  /* 2. The headings never got smaller. Their clamp() minimums are reached at
+     about 480px and then hold, so a 38px hero line sat in a 327px column and
+     broke into four or five. These floors are what a phone actually gets. */
+  .hero h1 { font-size: 2rem; }
+  .page-hero h1 { font-size: 1.75rem; }
+  .section-head h2 { font-size: 1.6rem; }
+  .card h3 { font-size: 1.12rem; }
+  /* Large display type set at 1.15 reads tight once it wraps this often. */
+  h1, h2 { line-height: 1.22; }
+
+  section { padding: 56px 0; }
 }
