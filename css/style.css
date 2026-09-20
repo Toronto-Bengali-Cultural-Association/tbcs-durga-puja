@@ -461,6 +461,26 @@ section { position: relative; padding: 88px 0; }
   color: var(--text-muted);
 }
 .donate-note svg { flex: 0 0 auto; margin-top: 3px; color: var(--gold-500); }
+
+/* Compact variant for the home page, where donating is one option among
+   several rather than the point of the page. */
+.donate-panel.is-compact {
+  max-width: 560px;
+  margin-bottom: 0;
+  padding: 30px 28px 26px;
+}
+.donate-panel.is-compact h3 { font-size: 1.25rem; margin-bottom: 8px; }
+.donate-panel.is-compact > p:not(.donate-note) { margin-bottom: 20px; font-size: 0.95rem; }
+.donate-panel.is-compact .donate-note {
+  margin-top: 20px;
+  font-size: 0.78rem;
+  max-width: none;
+  justify-content: center;
+  text-align: center;
+}
+@media (max-width: 560px) {
+  .donate-panel.is-compact { padding: 24px 20px 22px; }
+}
 @media (max-width: 600px) {
   .donate-panel { padding: 30px 22px 26px; }
 }
