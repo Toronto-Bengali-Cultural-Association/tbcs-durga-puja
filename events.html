@@ -7,7 +7,7 @@
 <meta name="description" content="Dates, venue, and full schedule for the TBCS Durga Pujo celebration in Toronto.">
 <link rel="icon" href="images/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="css/style.css?v=e5e9cfb3">
+<link rel="stylesheet" href="css/style.css?v=18c21984">
 </head>
 <body>
 
@@ -107,7 +107,58 @@
     </div>
   </section>
 
-  <section class="section-alt">
+  <!-- Competitions. Every detail here is taken from the flyers; where a flyer is
+       silent (Shonkho lists no age group), nothing is invented to fill the gap.
+       Each card links to its own Google Form, matched by reading the form
+       titles rather than by the order the links arrived in. -->
+  <section class="section-alt" id="competitions">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Take Part</span>
+        <h2>Competitions</h2>
+        <p>Three competitions run alongside the Pujo, and all of them are free to enter. Register ahead of time so we can plan seats and materials.</p>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card comp-card reveal">
+          <img class="comp-flyer" src="images/competition-drawing.jpg" width="1200" height="1500" alt="Drawing Competition flyer" loading="lazy" data-lightbox
+               data-lightbox-img="images/competition-drawing.jpg" data-lightbox-label="Drawing Competition flyer">
+          <h3>Drawing Competition</h3>
+          <p class="comp-when">Saturday 10 October &middot; 11:00 AM to 1:00 PM</p>
+          <p class="comp-ages">Ages 3 to 10 and 11 to 18</p>
+          <p>Drawing sheets are provided. Bring your own art materials and drinking water. Any colouring medium is welcome except glitter. The judges&rsquo; decision is final, and there are prizes for the winners.</p>
+          <p class="comp-deadline"><strong>Register by 4 October 2026.</strong></p>
+          <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdJsGZpUEgx1ikjmxVHB4a-NtfQkSzOlkSHH8h3_8-HvpIZuw/viewform"
+             target="_blank" rel="noopener noreferrer">Register</a>
+        </div>
+
+        <div class="card comp-card reveal reveal-delay-1">
+          <img class="comp-flyer" src="images/competition-shonkho.jpg" width="1200" height="1600" alt="Shonkho Competition flyer" loading="lazy" data-lightbox
+               data-lightbox-img="images/competition-shonkho.jpg" data-lightbox-label="Shonkho Competition flyer">
+          <h3>Shonkho Competition</h3>
+          <p class="comp-when">Saturday 10 October &middot; 3:30 PM to 4:30 PM</p>
+          <p>Sound the conch for the gathering. Open to everyone who would like to take a turn.</p>
+          <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSeJJq1KkPF92fUeHgoFZZPkPxyKhaBBdBrFR4qS2TzRrRHkWA/viewform"
+             target="_blank" rel="noopener noreferrer">Register</a>
+        </div>
+
+        <div class="card comp-card reveal reveal-delay-2">
+          <img class="comp-flyer" src="images/competition-got-talent.jpg" width="1080" height="1350" alt="TBCS Got Talent 2026 flyer" loading="lazy" data-lightbox
+               data-lightbox-img="images/competition-got-talent.jpg" data-lightbox-label="TBCS Got Talent 2026 flyer">
+          <h3>TBCS Got Talent 2026</h3>
+          <p class="comp-when">Sunday 11 October &middot; 11:30 AM to 1:00 PM</p>
+          <p class="comp-ages">Ages 4 to 12</p>
+          <p>Sing, dance, play, recite, or show us something else entirely. The stage is yours.</p>
+          <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSfkz2RtyL9C2Cbj-A-VjPw3sRoAZ3oW3GqCqpN6yI5lMjI2PQ/viewform"
+             target="_blank" rel="noopener noreferrer">Register</a>
+        </div>
+      </div>
+
+      <p class="comp-note reveal">All three are free to enter and take place at the venue. Questions? Email <a href="mailto:tbcscanada@gmail.com" class="link-underline">tbcscanada@gmail.com</a>. Tap a flyer to see it full size.</p>
+    </div>
+  </section>
+
+  <section>
     <div class="container two-col">
       <div class="reveal">
         <span class="eyebrow">Venue</span>
@@ -134,7 +185,7 @@
     </div>
   </section>
 
-  <section>
+  <section class="section-alt">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Come Hungry</span>
@@ -220,6 +271,13 @@
     </div>
   </div>
 </footer>
+
+<div class="lightbox">
+  <button class="lightbox-close" aria-label="Close">&times;</button>
+  <div class="lightbox-inner">
+    <img class="lightbox-photo" data-lightbox-photo alt="">
+  </div>
+</div>
 
 <script src="js/main.js?v=b46b5e0e"></script>
 </body>

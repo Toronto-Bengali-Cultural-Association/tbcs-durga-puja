@@ -15,3 +15,6 @@ images/*.cr2
 # images/sponsors/ and committed there instead
 Sponser Slide*.pptx
 Sponser Slide*.pdf
+
+# Flyer originals as downloaded; the web copies live in images/competition-*.jpg
+*_n.jpg
