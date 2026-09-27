@@ -168,9 +168,14 @@ function initContactForm() {
 
 /* Sponsor row — a plain horizontal scroller. No auto-scroll by design: the row
    is browsed by dragging, swiping, or the arrows. */
+/* Get Involved carries two of these, this year's sponsors and every past
+   supporter, so each one is wired separately rather than assuming a page has
+   at most one. */
 function initSponsorShow() {
-  const show = document.querySelector('[data-sponsor-show]');
-  if (!show) return;
+  document.querySelectorAll('[data-sponsor-show]').forEach(setUpSponsorShow);
+}
+
+function setUpSponsorShow(show) {
   const strip = show.querySelector('.sponsor-strip');
   const roll = show.querySelector('.sponsor-roll');
   const stageImgs = show.querySelectorAll('.sponsor-stage img');

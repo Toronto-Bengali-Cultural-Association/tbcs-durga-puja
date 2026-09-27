@@ -473,6 +473,26 @@ section { position: relative; padding: 88px 0; }
   .comp-flyer { height: 240px; }
 }
 
+/* The flyer is a tall portrait poster. Left at half the row it made the block
+   run far longer than the few lines of text beside it, so it is capped well
+   under the column width and the whole flyer stays one tap away. */
+.evening-flyer {
+  width: 100%;
+  /* The img carries width/height attributes, which the browser applies as a
+     used height unless CSS says otherwise. Without this the poster was drawn
+     260px wide and its full 1350px tall, stretching the whole block. */
+  height: auto;
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  cursor: zoom-in;
+}
+@media (max-width: 900px) {
+  .evening-flyer { max-width: 220px; }
+}
+
 /* -------------------- Donate panel -------------------- */
 .donate-panel {
   max-width: 700px;
@@ -634,6 +654,18 @@ section { position: relative; padding: 88px 0; }
   transform: scale(1.06);
 }
 
+/* Separates the two rows on Get Involved, this year's sponsors from everyone
+   who came before. Quiet on purpose: it labels a row, it is not a heading the
+   page is structured around. */
+.sponsor-group-label {
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 18px;
+}
+.sponsor-group-label + .sponsor-show { margin-bottom: 40px; }
 .sponsor-hint { text-align: center; margin-top: 14px; font-size: 0.8rem; color: var(--text-muted); }
 
 /* -------------------- Gallery -------------------- */
