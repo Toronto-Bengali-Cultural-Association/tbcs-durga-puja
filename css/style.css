@@ -666,6 +666,7 @@ section { position: relative; padding: 88px 0; }
   margin: 0 0 18px;
 }
 .sponsor-group-label + .sponsor-show { margin-bottom: 40px; }
+.give-aside { text-align: center; margin: 30px auto 0; font-size: 0.9rem; color: var(--text-muted); }
 .sponsor-hint { text-align: center; margin-top: 14px; font-size: 0.8rem; color: var(--text-muted); }
 
 /* -------------------- Gallery -------------------- */
