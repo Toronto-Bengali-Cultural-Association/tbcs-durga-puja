@@ -20,7 +20,7 @@ Re-stamp the asset hashes afterwards (see `CONTENT-TODO.md`).
 | Chayanika Dutta | Barrister, Solicitor & Notary Public, Scarborough | `images/sponsors-2026/chayanika-dutta.jpg` |
 | Arun Ganguly | Realtor, Century 21 Kennect Realty | `images/sponsors-2026/arun-ganguly.jpg` |
 | Indranil Ghosh | Realtor, HomeLife Platinum / Team House Finders | `images/sponsors-2026/indranil-ghosh.jpg` |
-| Mistaan Catering & Sweets | Bengali sweets and catering, North York | `images/sponsors-2026/mistaan.jpg` (cropped, see below) |
+| Mistaan Catering & Sweets | Bengali sweets and catering, North York | `images/sponsors-2026/mistaan.jpg` |
 | FISHCO | **Sweets sponsor** | `images/sponsors-2026/fishco.jpg` |
 | The Boxed Decors (Monica Nagpal) | Festive, religious and home decor | `images/sponsors-2026/the-boxed-decors.jpg` |
 
@@ -35,10 +35,14 @@ Re-stamp the asset hashes afterwards (see `CONTENT-TODO.md`).
 - FISHCO's artwork names it specifically as the **sweets sponsor**. If sponsorship
   tiers or categories are ever shown on the site, that is the one piece of
   category information the artwork actually states.
-- **Mistaan is cropped to the advert itself**, dropping the decorative
-  "Celebrating Our Sponsors" frame around it, on request. The other three framed
-  files (Dutta, Ganguly, Ghosh) still carry their frames, so the row is not
-  visually consistent; crop them the same way if that matters.
+- **The four framed files are cropped to the advert itself**, dropping the
+  decorative "Celebrating Our Sponsors" border around each: Dutta, Ganguly,
+  Ghosh and Mistaan. Each frame was a different shape, so the crops were read off
+  a measuring grid per image rather than shared. FISHCO and The Boxed Decors
+  arrived unframed and are untouched.
+- Crop geometry against the 1350x1688 originals, should they ever need redoing:
+  Dutta `806x996+272+313`, Ganguly `941x597+226+534`, Ghosh `784x950+290+320`,
+  Mistaan `810x976+270+312`.
 - Source files came in with Facebook's export names (`*_n.jpg`) and are
   gitignored; only the renamed, downscaled copies are committed.
 
